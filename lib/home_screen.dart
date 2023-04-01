@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:heureux_properties/pages/about_us.dart';
+import 'package:heureux_properties/pages/feedback.dart';
+import 'package:heureux_properties/pages/my_listings.dart';
+import 'package:heureux_properties/pages/notifications.dart';
+import 'package:heureux_properties/pages/profile.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -70,6 +77,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 value: 2,
                 child: Row(
                   children: const [
+                    Icon(FontAwesomeIcons.whatsapp),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text('WhatsApp'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 3,
+                child: Row(
+                  children: const [
                     Icon(Icons.report_outlined),
                     SizedBox(
                       width: 20,
@@ -125,6 +144,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Profile",
                 style: drawerOptionsTextStyle,
               ),
+              onTap: () {
+                nextPage(context: context, page: const ProfilePage());
+              },
             ),
 
             ListTile(
@@ -137,7 +159,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 "My Listings",
                 style: drawerOptionsTextStyle,
               ),
+              onTap: () {
+                nextPage(context: context, page: const MyListingsPage());
+              },
             ),
+
             ListTile(
               leading: Icon(
                 Icons.notifications_outlined,
@@ -148,7 +174,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Notifications",
                 style: drawerOptionsTextStyle,
               ),
+              onTap: () {
+                nextPage(context: context, page: const NotificationsPage());
+              },
             ),
+
             ListTile(
               leading: Icon(
                 Icons.feedback_outlined,
@@ -159,7 +189,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Feedback",
                 style: drawerOptionsTextStyle,
               ),
+              onTap: () {
+                nextPage(context: context, page: const FeedbackPage());
+              },
             ),
+
             ListTile(
               leading: Icon(
                 Icons.info_outline_rounded,
@@ -170,17 +204,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 "About Us",
                 style: drawerOptionsTextStyle,
               ),
+              onTap: () {
+                nextPage(context: context, page: const AboutUsPage());
+              },
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.green,
-        child: const Icon(
-          FontAwesomeIcons.whatsapp,
-          color: Colors.white,
-          size: 36,
         ),
       ),
     );
