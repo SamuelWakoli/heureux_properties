@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heureux_properties/pages/about_us.dart';
 import 'package:heureux_properties/pages/feedback.dart';
+import 'package:heureux_properties/pages/filter.dart';
 import 'package:heureux_properties/pages/my_listings.dart';
 import 'package:heureux_properties/pages/notifications.dart';
 import 'package:heureux_properties/pages/profile.dart';
+import 'package:heureux_properties/pages/report_issue.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'utils.dart';
@@ -26,6 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
       path: phoneNumber,
     );
     await launchUrl(launchUri);
+  }
+
+  Future<void> _openWhatsApp() async {
+    final uri = Uri.parse("https://wa.me/254797228948");
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      // can't launch url
+    }
   }
 
   @override
@@ -98,7 +109,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ],
-            onSelected: (value) {},
+            onSelected: (value) {
+              switch (value) {
+                case 0:
+                  // filter
+                  nextPage(context: context, page: const FilterPage());
+                  break;
+                case 1:
+                  // call us
+                  makePhoneCall("+254797228948");
+                  break;
+                case 2:
+                  // whatsapp
+                  _openWhatsApp();
+                  break;
+                case 3:
+                  // report issue
+                  nextPage(context: context, page: const ReportIssuePage());
+                  break;
+                default:
+                // default statement
+                // nothing
+              }
+            },
           )
         ],
       ),
