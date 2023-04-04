@@ -39,6 +39,8 @@ dependencies:
   firebase_auth: ^4.4.0
   firebase_ui_auth: ^1.2.0
   firebase_ui_oauth_google: ^1.1.0
+  cloud_firestore: ^4.5.0
+  firebase_storage: ^11.1.0
   flutter_phone_direct_caller: ^2.1.1
   permission_handler: ^10.2.0
   url_launcher: ^6.1.10
@@ -46,6 +48,8 @@ dependencies:
   easy_dynamic_theme: ^2.2.0
   page_transition: ^2.0.9
   cached_network_image: ^3.2.3
+  image_picker: ^0.8.7+1
+
 
 
 dev_dependencies:

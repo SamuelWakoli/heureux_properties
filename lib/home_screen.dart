@@ -114,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 case 0:
                   // filter
                   nextPage(context: context, page: const FilterPage());
+
                   break;
                 case 1:
                   // call us
