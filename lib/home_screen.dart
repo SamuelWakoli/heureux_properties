@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heureux_properties/pages/about_us.dart';
 import 'package:heureux_properties/pages/feedback.dart';
 import 'package:heureux_properties/pages/filter.dart';
 import 'package:heureux_properties/pages/my_listings.dart';
-import 'package:heureux_properties/pages/notifications.dart';
 import 'package:heureux_properties/pages/profile.dart';
 import 'package:heureux_properties/pages/report_issue.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,13 +30,29 @@ class _HomeScreenState extends State<HomeScreen> {
     await launchUrl(launchUri);
   }
 
-  Future<void> _openWhatsApp() async {
+  Future<void> _openWhatsApp({required context}) async {
     final uri = Uri.parse("https://wa.me/254797228948");
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       // can't launch url
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Unable to launch WhatsApp")));
     }
+  }
+
+  // check if profile pic exists
+  late bool userProfilePicExists;
+
+  @override
+  void initState() {
+    super.initState();
+
+    String profilePicURL =
+        FirebaseAuth.instance.currentUser!.photoURL.toString();
+    userProfilePicExists = (profilePicURL != "");
+
+    print("Profile picture exists? ${userProfilePicExists.toString()}");
   }
 
   @override
@@ -122,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   break;
                 case 2:
                   // whatsapp
-                  _openWhatsApp();
+                  _openWhatsApp(context: context);
                   break;
                 case 3:
                   // report issue
@@ -185,6 +201,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
             ListTile(
               leading: Icon(
+                Icons.collections_bookmark_outlined,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: const Text("Saved Properties"),
+              onTap: () {},
+            ),
+
+            ListTile(
+              leading: Icon(
                 Icons.list_alt_rounded,
                 size: 26,
                 color: Theme.of(context).primaryColor,
@@ -195,21 +220,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onTap: () {
                 nextPage(context: context, page: const MyListingsPage());
-              },
-            ),
-
-            ListTile(
-              leading: Icon(
-                Icons.notifications_outlined,
-                size: 26,
-                color: Theme.of(context).primaryColor,
-              ),
-              title: Text(
-                "Notifications",
-                style: drawerOptionsTextStyle,
-              ),
-              onTap: () {
-                nextPage(context: context, page: const NotificationsPage());
               },
             ),
 
