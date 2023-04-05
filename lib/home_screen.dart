@@ -204,7 +204,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.collections_bookmark_outlined,
                 color: Theme.of(context).primaryColor,
               ),
-              title: const Text("Saved Properties"),
+              title: Text(
+                "Saved Properties",
+                style: drawerOptionsTextStyle,
+              ),
               onTap: () {},
             ),
 

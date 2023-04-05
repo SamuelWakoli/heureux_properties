@@ -13,7 +13,59 @@ class _PaymentInfoState extends State<PaymentInfo> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Payment information"),
+        title: const Text("Payment History"),
+      ),
+      body: ListView(
+        children: const [
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+          ListTile(
+            title: Text("PropertyName | Ksh. 20,000"),
+            subtitle: Text("Date: 21/04/2022"),
+          ),
+        ],
       ),
     );
   }

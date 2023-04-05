@@ -486,7 +486,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Icons.payments_outlined,
                   color: Theme.of(context).primaryColor,
                 ),
-                title: const Text("Payment Information"),
+                title: const Text("Payment History"),
                 onTap: () =>
                     nextPage(context: context, page: const PaymentInfo()),
               ),
