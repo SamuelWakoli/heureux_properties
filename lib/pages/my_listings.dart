@@ -15,6 +15,10 @@ class _MyListingsPageState extends State<MyListingsPage> {
         centerTitle: true,
         title: const Text("My Listings"),
       ),
+      // TODO: add a FAB, to allow user add a property
+      // navigate to the next page on click
+
+      // use stream builder, if no item in lisings, show FAB
     );
   }
 }

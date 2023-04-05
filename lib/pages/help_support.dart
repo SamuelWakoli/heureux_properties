@@ -64,7 +64,7 @@ class _HelpSupportState extends State<HelpSupport> {
                 onPressed: () {
                   openWhatsApp(context: context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   FontAwesomeIcons.whatsapp,
                   color: Colors.green,
                 )),

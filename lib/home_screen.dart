@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heureux_properties/pages/about_us.dart';
+import 'package:heureux_properties/pages/bookmarks.dart';
 import 'package:heureux_properties/pages/feedback.dart';
 import 'package:heureux_properties/pages/filter.dart';
 import 'package:heureux_properties/pages/my_listings.dart';
+import 'package:heureux_properties/pages/my_properties.dart';
 import 'package:heureux_properties/pages/profile.dart';
 import 'package:heureux_properties/pages/report_issue.dart';
 
@@ -41,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
               radius: 16,
@@ -185,10 +188,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Theme.of(context).primaryColor,
               ),
               title: Text(
-                "Saved Properties",
+                "Bookmarks",
                 style: drawerOptionsTextStyle,
               ),
-              onTap: () {},
+              onTap: () {
+                nextPage(context: context, page: const Bookmarks());
+              },
+            ),
+
+            ListTile(
+              leading: Icon(
+                Icons.business,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: Text(
+                "My Properties",
+                style: drawerOptionsTextStyle,
+              ),
+              onTap: () {
+                nextPage(context: context, page: const MyProperties());
+              },
             ),
 
             ListTile(
