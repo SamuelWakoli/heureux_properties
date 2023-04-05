@@ -29,5 +29,18 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       android:requestLegacyExternalStorage="true"
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data android:scheme="https"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="tel"/>
+        </intent>
+    </queries>
 </manifest>

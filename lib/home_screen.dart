@@ -7,7 +7,6 @@ import 'package:heureux_properties/pages/filter.dart';
 import 'package:heureux_properties/pages/my_listings.dart';
 import 'package:heureux_properties/pages/profile.dart';
 import 'package:heureux_properties/pages/report_issue.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'utils.dart';
 
@@ -21,25 +20,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // this is the styling text for Drawer Menu list tiles
   TextStyle drawerOptionsTextStyle = const TextStyle(fontSize: 16);
-
-  Future<void> makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    await launchUrl(launchUri);
-  }
-
-  Future<void> _openWhatsApp({required context}) async {
-    final uri = Uri.parse("https://wa.me/254797228948");
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      // can't launch url
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Unable to launch WhatsApp")));
-    }
-  }
 
   // check if profile pic exists
   late bool userProfilePicExists;
@@ -138,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   break;
                 case 2:
                   // whatsapp
-                  _openWhatsApp(context: context);
+                  openWhatsApp(context: context);
                   break;
                 case 3:
                   // report issue
