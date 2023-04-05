@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:heureux_properties/pages/help_support.dart';
+import 'package:heureux_properties/pages/payment_information.dart';
 import 'package:heureux_properties/utils.dart';
 
 import 'edit_profile_img.dart';
@@ -19,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
       FirebaseAuth.instance.currentUser!.photoURL.toString();
   String? username = FirebaseAuth.instance.currentUser!.displayName.toString();
   String? userEmail = FirebaseAuth.instance.currentUser!.email.toString();
-  String? userPhone = FirebaseAuth.instance.currentUser!.phoneNumber.toString();
+  String? userPhone;
   bool isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
 
   bool editingName = false;
@@ -34,9 +36,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     if (username == null || username == "" || username == "null") {
       username = "Edit username";
-    }
-    if (userPhone == null || userPhone == "" || userPhone == "null") {
-      userPhone = "Edit phone number";
     }
 
     return Scaffold(
@@ -113,8 +112,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   editingName = false;
                                 });
                               },
-                              child: Text("Cancel")),
-                          SizedBox(width: 10),
+                              child: const Text("Cancel")),
+                          const SizedBox(width: 10),
                           SizedBox(
                             width: 200,
                             child: TextFormField(
@@ -134,28 +133,28 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           ElevatedButton(
                               onPressed: () async {
-                                setState(() {
-                                  editingName = false;
-                                  loading = true;
-                                });
                                 if (newName != "") {
+                                  setState(() {
+                                    editingName = false;
+                                    loading = true;
+                                  });
                                   await FirebaseAuth.instance.currentUser!
                                       .updateDisplayName(newName)
                                       .whenComplete(() {
-                                    setState(() {
-                                      loading = false;
-                                    });
+                                    nextPageReplace(
+                                        context: context,
+                                        page: const ProfilePage());
                                   }).onError((error, stackTrace) {
-                                    setState(() {
-                                      loading = false;
-                                    });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                             content: Text(
                                                 "An error occurred: $error")));
+                                    nextPageReplace(
+                                        context: context,
+                                        page: const ProfilePage());
                                   });
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -168,28 +167,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: CircularProgressIndicator(
                                       color: Theme.of(context).primaryColor,
                                     ))
-                                  : Text(
+                                  : const Text(
                                       "Save",
                                       style: TextStyle(fontSize: 18),
                                     ))
                         ],
                       ),
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(username!,
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold)),
-                        SizedBox(width: 10),
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                editingName = true;
-                              });
-                            },
-                            icon: Icon(Icons.edit))
-                      ],
+                  : ListTile(
+                      title: Text(username!,
+                          style: const TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold)),
+                      trailing: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              editingName = true;
+                            });
+                          },
+                          tooltip: "Edit username",
+                          icon: const Icon(Icons.edit)),
                     ),
               editingEmail
                   ? Padding(
@@ -203,8 +199,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   editingEmail = false;
                                 });
                               },
-                              child: Text("Cancel")),
-                          SizedBox(width: 10),
+                              child: const Text("Cancel")),
+                          const SizedBox(width: 10),
                           SizedBox(
                             width: 200,
                             child: TextFormField(
@@ -224,28 +220,45 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           ElevatedButton(
                               onPressed: () async {
-                                setState(() {
-                                  editingEmail = false;
-                                  loading = true;
-                                });
                                 if (newEmail != "") {
+                                  setState(() {
+                                    editingEmail = false;
+                                    loading = true;
+                                  });
                                   await FirebaseAuth.instance.currentUser!
                                       .updateEmail(newEmail)
                                       .whenComplete(() {
-                                    setState(() {
-                                      loading = false;
-                                    });
+                                    nextPageReplace(
+                                        context: context,
+                                        page: const ProfilePage());
                                   }).onError((error, stackTrace) {
-                                    setState(() {
-                                      loading = false;
-                                    });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                             content: Text(
                                                 "An error occurred: $error")));
+                                    showDialog(
+                                        context: context,
+                                        builder: (ctx) {
+                                          return AlertDialog(
+                                            icon:
+                                                const Icon(Icons.mail_outlined),
+                                            title: const Text("Edit Email"),
+                                            content: const Text(
+                                                "Please note: To edit your email for a second time, please logout and login again."),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(ctx),
+                                                  child: const Text("Okay"))
+                                            ],
+                                          );
+                                        });
+                                    nextPageReplace(
+                                        context: context,
+                                        page: const ProfilePage());
                                   });
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -258,26 +271,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: CircularProgressIndicator(
                                       color: Theme.of(context).primaryColor,
                                     ))
-                                  : Text(
+                                  : const Text(
                                       "Save",
                                       style: TextStyle(fontSize: 18),
                                     ))
                         ],
                       ),
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(userEmail!, style: TextStyle(fontSize: 20)),
-                        SizedBox(width: 10),
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                editingEmail = true;
-                              });
-                            },
-                            icon: Icon(Icons.edit))
-                      ],
+                  : ListTile(
+                      title: Text(userEmail!,
+                          style: const TextStyle(fontSize: 20)),
+                      trailing: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              editingEmail = true;
+                            });
+                          },
+                          tooltip: "Edit email",
+                          icon: const Icon(Icons.edit)),
                     ),
               editingPhone
                   ? Padding(
@@ -291,8 +302,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   editingPhone = false;
                                 });
                               },
-                              child: Text("Cancel")),
-                          SizedBox(width: 10),
+                              child: const Text("Cancel")),
+                          const SizedBox(width: 10),
                           SizedBox(
                             width: 200,
                             child: TextFormField(
@@ -312,14 +323,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           ElevatedButton(
                               onPressed: () async {
-                                setState(() {
-                                  editingPhone = false;
-                                  loading = true;
-                                });
                                 if (newPhone != "") {
+                                  setState(() {
+                                    editingPhone = false;
+                                    loading = true;
+                                  });
+
                                   Map<String, dynamic> data = {
                                     "phone": newPhone
                                   };
@@ -352,91 +364,112 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: CircularProgressIndicator(
                                       color: Theme.of(context).primaryColor,
                                     ))
-                                  : Text(
+                                  : const Text(
                                       "Save",
                                       style: TextStyle(fontSize: 18),
                                     ))
                         ],
                       ),
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(userPhone!, style: TextStyle(fontSize: 20)),
-                        SizedBox(width: 10),
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                editingPhone = true;
-                              });
-                            },
-                            icon: Icon(Icons.edit))
-                      ],
+                  : ListTile(
+                      title: StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(userEmail)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            userPhone = "Edit phone number";
+
+                            if (!snapshot.hasData) {
+                              return Text(userPhone!,
+                                  style: const TextStyle(fontSize: 20));
+                            }
+
+                            if (!snapshot.data!.exists) {
+                              return Text(userPhone!,
+                                  style: const TextStyle(fontSize: 20));
+                            }
+                            userPhone = snapshot.data!.get("phone").toString();
+
+                            return Text(userPhone!,
+                                style: const TextStyle(fontSize: 20));
+                          }),
+                      trailing: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              editingPhone = true;
+                            });
+                          },
+                          icon: const Icon(Icons.edit)),
                     ),
-              SizedBox(height: 20),
-              isEmailVerified
-                  ? const Text("Email: Verified")
-                  : Text.rich(TextSpan(text: "Email not verified. ", children: [
-                      TextSpan(
-                          text: "Click here to verify",
-                          style: TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              showDialog(
-                                  context: context,
-                                  builder: (ctx) {
-                                    return AlertDialog(
-                                      icon: Icon(Icons.email_outlined),
-                                      title: Text("Email Verification"),
-                                      content: Text(
-                                          "You are about to verify $userEmail. Do you want to continue?"),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () async {
-                                              await FirebaseAuth
-                                                  .instance.currentUser!
-                                                  .sendEmailVerification()
-                                                  .whenComplete(() {
+              const SizedBox(height: 20),
+              ListTile(
+                title: isEmailVerified
+                    ? const Text("Email: Verified")
+                    : Text.rich(
+                        TextSpan(text: "Email not verified. ", children: [
+                        TextSpan(
+                            text: "Click here to verify",
+                            style: const TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                showDialog(
+                                    context: context,
+                                    builder: (ctx) {
+                                      return AlertDialog(
+                                        icon: const Icon(Icons.email_outlined),
+                                        title: const Text("Email Verification"),
+                                        content: Text(
+                                            "You are about to verify $userEmail. Do you want to continue?"),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () async {
+                                                await FirebaseAuth
+                                                    .instance.currentUser!
+                                                    .sendEmailVerification()
+                                                    .whenComplete(() {
+                                                  Navigator.pop(ctx);
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (ctx) {
+                                                        return AlertDialog(
+                                                          icon: const Icon(Icons
+                                                              .email_outlined),
+                                                          title: const Text(
+                                                              "Email Verification"),
+                                                          content: Text(
+                                                              "An email containing the verification link has been sent to $userEmail. Please check your inbox to complete the verification."),
+                                                          actions: [
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      ctx);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "Okay"))
+                                                          ],
+                                                        );
+                                                      });
+                                                }).onError((error, stackTrace) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              "An error occurred: $error")));
+                                                });
+                                              },
+                                              child: const Text("Yes")),
+                                          TextButton(
+                                              onPressed: () {
                                                 Navigator.pop(ctx);
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (ctx) {
-                                                      return AlertDialog(
-                                                        icon: Icon(Icons
-                                                            .email_outlined),
-                                                        title: Text(
-                                                            "Email Verification"),
-                                                        content: Text(
-                                                            "An email containing the verification link has been sent to $userEmail. Please check your inbox to complete the verification."),
-                                                        actions: [
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    ctx);
-                                                              },
-                                                              child: const Text(
-                                                                  "Okay"))
-                                                        ],
-                                                      );
-                                                    });
-                                              }).onError((error, stackTrace) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: Text(
-                                                            "An error occurred: $error")));
-                                              });
-                                            },
-                                            child: Text("Yes")),
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(ctx);
-                                            },
-                                            child: Text("No")),
-                                      ],
-                                    );
-                                  });
-                            })
-                    ]))
+                                              },
+                                              child: const Text("No")),
+                                        ],
+                                      );
+                                    });
+                              })
+                      ])),
+              )
             ],
           ),
           Column(
@@ -454,6 +487,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Theme.of(context).primaryColor,
                 ),
                 title: const Text("Payment Information"),
+                onTap: () =>
+                    nextPage(context: context, page: const PaymentInfo()),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -467,6 +502,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Theme.of(context).primaryColor,
                 ),
                 title: const Text("Help and Support"),
+                onTap: () =>
+                    nextPage(context: context, page: const HelpSupport()),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
