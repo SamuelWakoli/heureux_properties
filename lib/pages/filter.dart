@@ -12,13 +12,14 @@ class FilterPage extends StatefulWidget {
 bool forRent = false, forLease = false, forSale = false, allCategory = true;
 
 // Property type
-bool land = false, apartment = false, allType = true;
+bool farm = false, land = false, plot = false, ranch = false, allType = true;
 
 // Property location
 String propertyLocation = "All locations";
 
 class _FilterPageState extends State<FilterPage> {
-  /// if no category is selected, [allCategories] go true
+  /// If no category is selected, [allCategories] go true.
+  /// Call this functions at the end of onSelected parameter of FilterChip
   void checkCategories(value) {
     if (value == false &&
         forRent == false &&
@@ -30,9 +31,14 @@ class _FilterPageState extends State<FilterPage> {
     }
   }
 
-  /// if no type is selected, [allTypes] go true
+  /// If no type is selected, [allTypes] go true.
+  /// Call this functions at the end of onSelected parameter of FilterChip.
   void checkTypes(value) {
-    if (value == false && land == false && apartment == false) {
+    if (value == false &&
+        farm == false &&
+        land == false &&
+        plot == false &&
+        ranch == false) {
       setState(() {
         allType = true;
       });
@@ -58,7 +64,6 @@ class _FilterPageState extends State<FilterPage> {
               label: const Text("For Rent"),
               selected: forRent,
               onSelected: (value) {
-                checkCategories(value);
                 // if this value is true, unselect all categories
                 if (value == true) {
                   setState(() {
@@ -68,6 +73,8 @@ class _FilterPageState extends State<FilterPage> {
                 setState(() {
                   forRent = value;
                 });
+
+                checkCategories(value);
               },
             ),
             const SizedBox(width: 20),
@@ -75,7 +82,6 @@ class _FilterPageState extends State<FilterPage> {
               label: const Text("For Lease"),
               selected: forLease,
               onSelected: (value) {
-                checkCategories(value);
                 // if this value is true, unselect all categories
                 if (value == true) {
                   setState(() {
@@ -85,6 +91,8 @@ class _FilterPageState extends State<FilterPage> {
                 setState(() {
                   forLease = value;
                 });
+
+                checkCategories(value);
               },
             ),
             const SizedBox(width: 20),
@@ -92,7 +100,6 @@ class _FilterPageState extends State<FilterPage> {
               label: const Text("For Sale"),
               selected: forSale,
               onSelected: (value) {
-                checkCategories(value);
                 // if this value is true, unselect all categories
                 if (value == true) {
                   setState(() {
@@ -102,6 +109,8 @@ class _FilterPageState extends State<FilterPage> {
                 setState(() {
                   forSale = value;
                 });
+
+                checkCategories(value);
               },
             ),
             const SizedBox(width: 20),
@@ -115,11 +124,7 @@ class _FilterPageState extends State<FilterPage> {
                     forRent = false;
                     forLease = false;
                     forSale = false;
-                  });
-                }
-                if (forRent == false && forLease == false && forSale == false) {
-                  setState(() {
-                    allCategory = true;
+                    allCategory = value;
                   });
                 } else {
                   setState(() {
@@ -145,10 +150,27 @@ class _FilterPageState extends State<FilterPage> {
           children: [
             const SizedBox(width: 20),
             FilterChip(
+              label: const Text("Farm"),
+              selected: farm,
+              onSelected: (value) {
+                // if this value is true, unselect all types
+                if (value == true) {
+                  setState(() {
+                    allType = false;
+                  });
+                }
+                setState(() {
+                  farm = value;
+                });
+
+                checkTypes(value);
+              },
+            ),
+            const SizedBox(width: 20),
+            FilterChip(
               label: const Text("Land"),
               selected: land,
               onSelected: (value) {
-                checkTypes(value);
                 // if this value is true, unselect all types
                 if (value == true) {
                   setState(() {
@@ -158,14 +180,15 @@ class _FilterPageState extends State<FilterPage> {
                 setState(() {
                   land = value;
                 });
+
+                checkTypes(value);
               },
             ),
             const SizedBox(width: 20),
             FilterChip(
-              label: const Text("Apartment"),
-              selected: apartment,
+              label: const Text("Plot"),
+              selected: plot,
               onSelected: (value) {
-                checkTypes(value);
                 // if this value is true, unselect all types
                 if (value == true) {
                   setState(() {
@@ -173,8 +196,28 @@ class _FilterPageState extends State<FilterPage> {
                   });
                 }
                 setState(() {
-                  apartment = value;
+                  plot = value;
                 });
+
+                checkTypes(value);
+              },
+            ),
+            const SizedBox(width: 20),
+            FilterChip(
+              label: const Text("Ranch"),
+              selected: ranch,
+              onSelected: (value) {
+                // if this value is true, unselect all types
+                if (value == true) {
+                  setState(() {
+                    allType = false;
+                  });
+                }
+                setState(() {
+                  ranch = value;
+                });
+
+                checkTypes(value);
               },
             ),
             const SizedBox(width: 20),
@@ -185,8 +228,10 @@ class _FilterPageState extends State<FilterPage> {
                   // when user selects all types, all other chips go false
                   if (value == true) {
                     setState(() {
+                      farm = false;
                       land = false;
-                      apartment = false;
+                      plot = false;
+                      ranch = false;
                     });
                   }
                   setState(() {
