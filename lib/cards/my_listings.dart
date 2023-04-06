@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Creates a
+/// Creates card for the My Listings Page
 Widget myListingsCard(
     {required context,
     id,
@@ -31,6 +31,7 @@ Widget myListingsCard(
             title: const Text("Property Name"),
             subtitle: Text("Price: Ksh. 1,000,000\nLocation: propertyLocation"),
             trailing: IconButton(
+              tooltip: "Remove",
               icon: const Icon(
                 Icons.delete_forever_outlined,
                 color: Colors.red,

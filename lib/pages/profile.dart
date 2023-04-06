@@ -117,12 +117,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(
                             width: 200,
                             child: TextFormField(
+                              initialValue: username,
                               onChanged: (value) async {
                                 newName = value;
                               },
                               keyboardType: TextInputType.name,
                               decoration: InputDecoration(
-                                hintText: username,
                                 isCollapsed: false,
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -204,6 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(
                             width: 200,
                             child: TextFormField(
+                              initialValue: userEmail,
                               onChanged: (value) async {
                                 newEmail = value;
                               },
@@ -307,6 +308,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(
                             width: 200,
                             child: TextFormField(
+                              initialValue: userPhone,
                               onChanged: (value) async {
                                 newPhone = value;
                               },
@@ -400,6 +402,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               editingPhone = true;
                             });
                           },
+                          tooltip: "Edit Phone Number",
                           icon: const Icon(Icons.edit)),
                     ),
               const SizedBox(height: 20),

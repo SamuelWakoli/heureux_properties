@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:heureux_properties/cards/card_functions.dart';
 
 import '../pages/details.dart';
-import '../pages/inquire.dart';
 import '../utils.dart';
+import 'card_functions.dart';
 
-/// Creates a Home Screen card widget
-Widget homeCard(
+/// Creates card for the Inquiry  Page
+Widget inquiryCard(
     {required context,
-    id,
-    required String propertyImg,
+    required id,
+    required propertyImg,
     propertyName,
     propertyPrice,
     propertyLocation}) {
@@ -32,27 +31,13 @@ Widget homeCard(
                   fit: BoxFit.fitWidth,
                 )),
           ),
-          const ListTile(
-            title: Text("Property Name"),
+          ListTile(
+            title: const Text("Property Name"),
             subtitle: Text("Price: Ksh. 1,000,000\nLocation: propertyLocation"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MaterialButton(
-                onPressed: () {
-                  currentPropertyID = id;
-                  nextPage(context: context, page: const InquirePage());
-                },
-                child: Row(
-                  children: const [
-                    Icon(Icons.cases_outlined),
-                    SizedBox(width: 10),
-                    Text("Inquire"),
-                  ],
-                ),
-              ),
-              SizedBox(width: 10),
               MaterialButton(
                 onPressed: () {
                   currentPropertyID = id;
@@ -66,12 +51,6 @@ Widget homeCard(
                   ],
                 ),
               ),
-              SizedBox(width: 30),
-              IconButton(
-                  onPressed: () {},
-                  tooltip: "Bookmark",
-                  icon: Icon(Icons.bookmark_add_outlined)),
-              SizedBox(width: 10),
             ],
           ),
         ],

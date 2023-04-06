@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Creates card for the My Properties Page
 Widget myPropertiesCard(
     {required context,
     id,

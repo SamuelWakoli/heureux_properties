@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../pages/details.dart';
+import '../pages/inquire.dart';
+import '../utils.dart';
+import 'card_functions.dart';
+
 /// Creates a bookmark card widget at the Bookmarks Page
 Widget bookmarkCard(
     {required context,
@@ -35,7 +40,10 @@ Widget bookmarkCard(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  currentPropertyID = id;
+                  nextPage(context: context, page: const InquirePage());
+                },
                 child: Row(
                   children: const [
                     Icon(Icons.cases_outlined),
@@ -46,7 +54,10 @@ Widget bookmarkCard(
               ),
               SizedBox(width: 10),
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  currentPropertyID = id;
+                  nextPage(context: context, page: const DetailsPage());
+                },
                 child: Row(
                   children: const [
                     Icon(Icons.info_outline_rounded),
@@ -55,9 +66,15 @@ Widget bookmarkCard(
                   ],
                 ),
               ),
-              SizedBox(width: 10),
-              MaterialButton(
-                  onPressed: () {}, child: Icon(Icons.delete_forever_outlined)),
+              SizedBox(width: 30),
+              IconButton(
+                onPressed: () {},
+                tooltip: "Remove",
+                icon: Icon(
+                  Icons.delete_forever_outlined,
+                  color: Colors.red,
+                ),
+              ),
               SizedBox(width: 10),
             ],
           ),
