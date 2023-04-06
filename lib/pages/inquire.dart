@@ -40,8 +40,9 @@ class _InquirePageState extends State<InquirePage> {
               context: context,
               id: currentPropertyID,
               propertyImg: "assets/property1.jpg"),
+          SizedBox(height: 20),
           const ListTile(
-            title: Text("Please confirm your information"),
+            title: Text("Please confirm your information:"),
           ),
           editingName
               ? Padding(
