@@ -155,13 +155,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Card(
                 elevation: 2,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: ListTile(
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: SizedBox(
-                        height: 60,
-                        width: 60,
+                        height: 48,
+                        width: 48,
                         child: CachedNetworkImage(
                           fit: BoxFit.fill,
                           imageUrl: userprofileUrl!,
