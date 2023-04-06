@@ -88,17 +88,14 @@ class _InquirePageState extends State<InquirePage> {
                               await FirebaseAuth.instance.currentUser!
                                   .updateDisplayName(newName)
                                   .whenComplete(() {
-                                setState(() {
-                                  username;
-                                });
+                                nextPageReplace(
+                                    context: context,
+                                    page: const InquirePage());
                               }).onError((error, stackTrace) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content:
                                             Text("An error occurred: $error")));
-                                nextPageReplace(
-                                    context: context,
-                                    page: const InquirePage());
                               });
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -129,108 +126,6 @@ class _InquirePageState extends State<InquirePage> {
                         });
                       },
                       tooltip: "Edit username",
-                      icon: const Icon(Icons.edit)),
-                ),
-          editingEmail
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              editingEmail = false;
-                            });
-                          },
-                          child: const Text("Cancel")),
-                      const SizedBox(width: 10),
-                      SizedBox(
-                        width: 200,
-                        child: TextFormField(
-                          initialValue: userEmail,
-                          onChanged: (value) async {
-                            newEmail = value;
-                          },
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            hintText: userEmail,
-                            isCollapsed: false,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                          onPressed: () async {
-                            if (newEmail != "") {
-                              setState(() {
-                                editingEmail = false;
-                                loading = true;
-                              });
-                              await FirebaseAuth.instance.currentUser!
-                                  .updateEmail(newEmail)
-                                  .whenComplete(() {
-                                nextPageReplace(
-                                    context: context,
-                                    page: const InquirePage());
-                              }).onError((error, stackTrace) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text("An error occurred: $error")));
-                                showDialog(
-                                    context: context,
-                                    builder: (ctx) {
-                                      return AlertDialog(
-                                        icon: const Icon(Icons.mail_outlined),
-                                        title: const Text("Edit Email"),
-                                        content: const Text(
-                                            "Please note: To edit your email for a second time, please logout and login again."),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(ctx),
-                                              child: const Text("Okay"))
-                                        ],
-                                      );
-                                    });
-                                nextPageReplace(
-                                    context: context,
-                                    page: const InquirePage());
-                              });
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("No changes made.")));
-                            }
-                          },
-                          child: loading
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                  color: Theme.of(context).primaryColor,
-                                ))
-                              : const Text(
-                                  "Save",
-                                  style: TextStyle(fontSize: 18),
-                                ))
-                    ],
-                  ),
-                )
-              : ListTile(
-                  title: Text(userEmail!, style: const TextStyle(fontSize: 20)),
-                  trailing: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          editingEmail = true;
-                        });
-                      },
-                      tooltip: "Edit email",
                       icon: const Icon(Icons.edit)),
                 ),
           editingPhone
