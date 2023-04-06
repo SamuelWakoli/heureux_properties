@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +11,7 @@ import 'package:heureux_properties/pages/my_properties.dart';
 import 'package:heureux_properties/pages/profile.dart';
 import 'package:heureux_properties/pages/report_issue.dart';
 
+import 'cards/home_screen.dart';
 import 'utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,19 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
   // this is the styling text for Drawer Menu list tiles
   TextStyle drawerOptionsTextStyle = const TextStyle(fontSize: 16);
 
-  // check if profile pic exists
-  late bool userProfilePicExists;
-
-  @override
-  void initState() {
-    super.initState();
-
-    String profilePicURL =
-        FirebaseAuth.instance.currentUser!.photoURL.toString();
-    userProfilePicExists = (profilePicURL != "");
-
-    print("Profile picture exists? ${userProfilePicExists.toString()}");
-  }
+  String? userprofileUrl =
+      FirebaseAuth.instance.currentUser!.photoURL.toString();
+  String? username = FirebaseAuth.instance.currentUser!.displayName.toString();
+  String? userEmail = FirebaseAuth.instance.currentUser!.email.toString();
 
   @override
   Widget build(BuildContext context) {
@@ -52,27 +45,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(width: 10),
             const Text(
-              "Heureux Properties",
+              "Heureux properties",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             )
           ],
         ),
         actions: [
+          IconButton(
+            onPressed: () =>
+                nextPage(context: context, page: const FilterPage()),
+            icon: const Icon(Icons.filter_list_outlined),
+            tooltip: "Filter",
+          ),
           PopupMenuButton(
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
               PopupMenuItem(
                 value: 0,
-                child: Row(
-                  children: const [
-                    Icon(Icons.filter_list_outlined),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text('Filter'),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 1,
                 child: Row(
                   children: const [
                     Icon(Icons.phone_outlined),
@@ -84,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               PopupMenuItem(
-                value: 2,
+                value: 1,
                 child: Row(
                   children: const [
                     Icon(FontAwesomeIcons.whatsapp),
@@ -96,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               PopupMenuItem(
-                value: 3,
+                value: 2,
                 child: Row(
                   children: const [
                     Icon(Icons.report_outlined),
@@ -111,19 +99,14 @@ class _HomeScreenState extends State<HomeScreen> {
             onSelected: (value) {
               switch (value) {
                 case 0:
-                  // filter
-                  nextPage(context: context, page: const FilterPage());
-
-                  break;
-                case 1:
                   // call us
                   makePhoneCall("+254797228948");
                   break;
-                case 2:
+                case 1:
                   // whatsapp
                   openWhatsApp(context: context);
                   break;
-                case 3:
+                case 2:
                   // report issue
                   nextPage(context: context, page: const ReportIssuePage());
                   break;
@@ -167,20 +150,51 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // TODO: Replace this Tile when user created profile
-            ListTile(
-              leading: Icon(
-                Icons.account_circle_outlined,
-                size: 26,
-                color: Theme.of(context).primaryColor,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: Card(
+                elevation: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: SizedBox(
+                        height: 60,
+                        width: 60,
+                        child: CachedNetworkImage(
+                          fit: BoxFit.fill,
+                          imageUrl: userprofileUrl!,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          errorWidget: (cx, url, downloadProgress) => Center(
+                            child: Icon(
+                              Icons.account_circle_outlined,
+                              size: 46,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      "Profile",
+                      style: drawerOptionsTextStyle,
+                    ),
+                    subtitle: Text(userEmail!),
+                    onTap: () {
+                      nextPage(context: context, page: const ProfilePage());
+                    },
+                  ),
+                ),
               ),
-              title: Text(
-                "Profile",
-                style: drawerOptionsTextStyle,
-              ),
-              onTap: () {
-                nextPage(context: context, page: const ProfilePage());
-              },
             ),
+
+            const SizedBox(height: 20),
 
             ListTile(
               leading: Icon(
@@ -256,6 +270,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+      body: ListView(
+        children: [
+          homeCard(context: context, propertyImg: 'assets/property1.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property2.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property3.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property4.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property5.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property6.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property1.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property2.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property3.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property4.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property5.jpg'),
+          homeCard(context: context, propertyImg: 'assets/property6.jpg'),
+        ],
       ),
     );
   }
