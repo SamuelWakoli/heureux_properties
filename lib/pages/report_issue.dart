@@ -26,12 +26,12 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
                 issueText = value;
               },
               minLines: 8,
-              maxLines: 8,
+              maxLines: 16,
               cursorHeight: 22,
               cursorWidth: 2,
               cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
-                labelText: 'Type here:',
+                hintText: 'Type here:',
                 labelStyle: TextStyle(color: Theme.of(context).primaryColor),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(

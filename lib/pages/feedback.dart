@@ -26,9 +26,9 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 feedbackText = value;
               },
               minLines: 8,
-              maxLines: 8,
+              maxLines: 16,
               decoration: InputDecoration(
-                labelText: 'Type here:',
+                hintText: 'Type here:',
                 labelStyle: TextStyle(color: Theme.of(context).primaryColor),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(

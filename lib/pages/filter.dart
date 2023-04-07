@@ -29,6 +29,18 @@ class _FilterPageState extends State<FilterPage> {
         allCategory = true;
       });
     }
+
+    if (value == true &&
+        forRent == true &&
+        forLease == true &&
+        forSale == true) {
+      setState(() {
+        allCategory = true;
+        forRent = false;
+        forLease = false;
+        forSale = false;
+      });
+    }
   }
 
   /// If no type is selected, [allTypes] go true.
@@ -41,6 +53,19 @@ class _FilterPageState extends State<FilterPage> {
         ranch == false) {
       setState(() {
         allType = true;
+      });
+    }
+    if (value == true &&
+        farm == true &&
+        land == true &&
+        plot == true &&
+        ranch == true) {
+      setState(() {
+        allType = true;
+        farm = false;
+        land = false;
+        plot = false;
+        ranch = false;
       });
     }
   }
