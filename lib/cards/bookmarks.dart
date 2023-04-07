@@ -34,7 +34,8 @@ Widget bookmarkCard(
           ),
           const ListTile(
             title: Text("Property Name"),
-            subtitle: Text("Price: Ksh. 1,000,000\nLocation: propertyLocation"),
+            subtitle: Text(
+                "For Sale | Price: Ksh. 1,000,000\nLocation: propertyLocation"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

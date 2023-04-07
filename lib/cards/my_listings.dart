@@ -29,7 +29,8 @@ Widget myListingsCard(
           ),
           ListTile(
             title: const Text("Property Name"),
-            subtitle: Text("Price: Ksh. 1,000,000\nLocation: propertyLocation"),
+            subtitle: Text(
+                "For Sale | Price: Ksh. 1,000,000\nLocation: propertyLocation"),
             trailing: IconButton(
               tooltip: "Remove",
               icon: const Icon(

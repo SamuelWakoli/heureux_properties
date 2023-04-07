@@ -30,7 +30,7 @@ Widget myPropertiesCard(
           const ListTile(
             title: Text("Property Name\nPrice: Ksh. 1,000,000"),
             subtitle: Text(
-                "Price: Ksh. 1,000,000\nLocation: propertyLocation\nStatus: Fully Paid"),
+                "For Sale | Price: Ksh. 1,000,000\nLocation: propertyLocation\nFully Paid"),
           ),
         ],
       ),
