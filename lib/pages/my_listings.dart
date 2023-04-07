@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heureux_properties/cards/my_listings.dart';
+import 'package:heureux_properties/pages/add_listing.dart';
+import 'package:heureux_properties/utils.dart';
 
 class MyListingsPage extends StatefulWidget {
   const MyListingsPage({Key? key}) : super(key: key);
@@ -50,7 +52,9 @@ class _MyListingsPageState extends State<MyListingsPage> {
           size: 36,
           //color: Theme.of(context).primaryColor,
         ),
-        onPressed: () {},
+        onPressed: () {
+          nextPage(context: context, page: const AddListingPage());
+        },
       ),
     );
   }

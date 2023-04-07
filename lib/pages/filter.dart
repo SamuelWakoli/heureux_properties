@@ -461,35 +461,6 @@ class _FilterPageState extends State<FilterPage> {
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: OutlinedButton(
-              style: ButtonStyle(
-                  side: MaterialStateProperty.resolveWith((states) =>
-                      BorderSide(color: Theme.of(context).primaryColor))),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Apply Filter",
-                      style: TextStyle(
-                          fontSize: 18, color: Theme.of(context).primaryColor),
-                    ),
-                    SizedBox(width: 20),
-                    Icon(
-                      Icons.done,
-                      size: 32,
-                      color: Theme.of(context).primaryColor,
-                    )
-                  ],
-                ),
-              )),
-        ),
       ]),
     );
   }

@@ -116,9 +116,10 @@ class _InquirePageState extends State<InquirePage> {
                   ),
                 )
               : ListTile(
-                  title: Text(username!,
+                  title: Text("Name: $username",
                       style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold)),
+                        fontSize: 20,
+                      )),
                   trailing: IconButton(
                       onPressed: () {
                         setState(() {
@@ -228,7 +229,7 @@ class _InquirePageState extends State<InquirePage> {
                         }
                         userPhone = snapshot.data!.get("phone").toString();
 
-                        return Text(userPhone!,
+                        return Text("Phone: $userPhone",
                             style: const TextStyle(fontSize: 20));
                       }),
                   trailing: IconButton(

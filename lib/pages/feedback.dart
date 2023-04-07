@@ -27,9 +27,6 @@ class _FeedbackPageState extends State<FeedbackPage> {
               },
               minLines: 8,
               maxLines: 8,
-              cursorHeight: 22,
-              cursorWidth: 2,
-              cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
                 labelText: 'Type here:',
                 labelStyle: TextStyle(color: Theme.of(context).primaryColor),
