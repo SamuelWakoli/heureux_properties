@@ -25,7 +25,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
         children: [
           ListTile(
             title: Text(
-              "Buy or sell your Land or Plot with Heureux Properties.",
+              "Buy, sell, rent or lease your Land or Plot with Heureux Properties.",
               style: titleStyle,
             ),
             subtitle: Text(
