@@ -143,8 +143,15 @@ class _FilterPageState extends State<FilterPage> {
               label: const Text("All categories"),
               selected: allCategory,
               onSelected: (value) {
+                // if no category is selected allCategory remains unchanged
+                if (allCategory == true &&
+                    forRent == false &&
+                    forLease == false &&
+                    forSale == false) {
+                  // do nothing
+                }
                 // when user selects all category, all other chips go false
-                if (value == true) {
+                else if (value == true) {
                   setState(() {
                     forRent = false;
                     forLease = false;
@@ -250,18 +257,28 @@ class _FilterPageState extends State<FilterPage> {
                 label: const Text("All types"),
                 selected: allType,
                 onSelected: (value) {
+                  // if no type is selected, AllType should not change
+                  if (allType == true &&
+                      farm == false &&
+                      land == false &&
+                      plot == false &&
+                      ranch == false) {
+                    // do nothing
+                  }
                   // when user selects all types, all other chips go false
-                  if (value == true) {
+                  else if (value == true) {
                     setState(() {
                       farm = false;
                       land = false;
                       plot = false;
                       ranch = false;
+                      allType = value;
+                    });
+                  } else {
+                    setState(() {
+                      allType = value;
                     });
                   }
-                  setState(() {
-                    allType = value;
-                  });
                 }),
             const SizedBox(width: 20),
           ],
