@@ -148,7 +148,12 @@ class _FilterPageState extends State<FilterPage> {
                     forRent == false &&
                     forLease == false &&
                     forSale == false) {
-                  // do nothing
+                  // tell user
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Property category cannot be empty'),
+                    ),
+                  );
                 }
                 // when user selects all category, all other chips go false
                 else if (value == true) {
@@ -263,7 +268,12 @@ class _FilterPageState extends State<FilterPage> {
                       land == false &&
                       plot == false &&
                       ranch == false) {
-                    // do nothing
+                    // tell user
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Property type cannot be empty'),
+                      ),
+                    );
                   }
                   // when user selects all types, all other chips go false
                   else if (value == true) {
