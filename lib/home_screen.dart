@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,6 +32,50 @@ class _HomeScreenState extends State<HomeScreen> {
       FirebaseAuth.instance.currentUser!.photoURL.toString();
   String? username = FirebaseAuth.instance.currentUser!.displayName.toString();
   String? userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // wait for 5 seconds for the home screen to load
+    Timer(const Duration(seconds: 5), () async {
+      print("STARTING TASKS");
+
+      /// To get number of users in the admin app, send user email to the
+      /// FireStore.
+      /// Fields to add: email, app start time,
+      String appStartTime =
+          "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} at ${DateTime.now().hour}:${DateTime.now().minute}/";
+      Map<String, dynamic> userData = {
+        "id": userEmail,
+        "name": username,
+        "app start time": appStartTime,
+      };
+
+      // check if user does not exist
+      bool userNotExistInDB = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userEmail)
+          .snapshots()
+          .isEmpty;
+
+      if (userNotExistInDB) {
+        // true -> call set
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(userEmail)
+            .set(userData);
+
+        print("CREATING USER");
+      }
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userEmail)
+          .update(userData);
+      print("UPDATING USER");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
