@@ -37,7 +37,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   )),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           const ListTile(
             title: Text.rich(
               TextSpan(
