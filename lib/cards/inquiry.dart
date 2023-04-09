@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/details.dart';
@@ -23,13 +24,16 @@ Widget inquiryCard(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(18.0),
-            child: SizedBox(
-                width: double.infinity,
-                height: 200,
-                child: Image.asset(
-                  propertyImg,
-                  fit: BoxFit.fitWidth,
-                )),
+            child: CachedNetworkImage(
+              fit: BoxFit.fill,
+              imageUrl: propertyImg,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(
+                value: downloadProgress.progress,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).primaryColor),
+              ),
+            ),
           ),
           ListTile(
             title: const Text("Property Name"),

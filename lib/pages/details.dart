@@ -28,13 +28,16 @@ class _DetailsPageState extends State<DetailsPage> {
             padding: const EdgeInsets.all(8.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(18.0),
-              child: SizedBox(
-                  width: double.infinity,
-                  height: 200,
-                  child: Image.asset(
-                    propertyImg,
-                    fit: BoxFit.fitWidth,
-                  )),
+              child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                imageUrl: propertyImg,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(
+                  value: downloadProgress.progress,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).primaryColor),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 20),
