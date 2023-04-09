@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heureux_properties/cards/bookmarks.dart';
 
@@ -11,21 +13,55 @@ class Bookmarks extends StatefulWidget {
 class _BookmarksState extends State<Bookmarks> {
   @override
   Widget build(BuildContext context) {
+    String? userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Bookmarks'),
       ),
-      body: ListView(
-        children: [
-          bookmarkCard(context: context, propertyImg: "assets/property1.jpg"),
-          bookmarkCard(context: context, propertyImg: "assets/property2.jpg"),
-          bookmarkCard(context: context, propertyImg: "assets/property3.jpg"),
-          bookmarkCard(context: context, propertyImg: "assets/property4.jpg"),
-          bookmarkCard(context: context, propertyImg: "assets/property5.jpg"),
-          bookmarkCard(context: context, propertyImg: "assets/property6.jpg"),
-        ],
-      ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("users")
+              .doc(userEmail)
+              .collection("bookmarks")
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ));
+            }
+
+            if (snapshot.data!.docs.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.bookmark_remove_outlined,
+                      color: Theme.of(context).primaryColor,
+                      size: 128,
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "You have no bookmarks",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            // TODO: get doc fields
+            return ListView(
+              children: [
+                bookmarkCard(
+                    context: context, propertyImg: "assets/property1.jpg"),
+              ],
+            );
+          }),
     );
   }
 }

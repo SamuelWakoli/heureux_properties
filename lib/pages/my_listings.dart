@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heureux_properties/cards/my_listings.dart';
 import 'package:heureux_properties/pages/add_listing.dart';
@@ -11,6 +13,8 @@ class MyListingsPage extends StatefulWidget {
 }
 
 class _MyListingsPageState extends State<MyListingsPage> {
+  String? userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,33 +22,53 @@ class _MyListingsPageState extends State<MyListingsPage> {
         centerTitle: true,
         title: const Text("My Listings"),
       ),
-      // TODO: add a FAB, to allow user add a property
-      // navigate to the next page on click
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("users")
+              .doc(userEmail)
+              .collection("my listings")
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ));
+            }
 
-      // use stream builder, if no item in lisings, show FAB
+            if (snapshot.data!.docs.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.business_rounded,
+                        color: Theme.of(context).primaryColor,
+                        size: 128,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        "Click the button below to sell/lease your property with us",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
 
-      // user "where" to get listings made by the user
-
-      body: ListView(
-        children: [
-          myListingsCard(context: context, propertyImg: "assets/property1.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property2.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property3.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property4.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property5.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property6.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property1.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property2.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property3.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property4.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property5.jpg"),
-          myListingsCard(context: context, propertyImg: "assets/property6.jpg"),
-        ],
-      ),
-
+            // TODO: get doc fields
+            return ListView(
+              children: [
+                myListingsCard(
+                    context: context, propertyImg: "assets/property1.jpg"),
+              ],
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         tooltip: "Add Property",
-        // splashColor: Theme.of(context).primaryColor,
         backgroundColor: Colors.amber,
         foregroundColor: Colors.black,
         child: const Icon(

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:heureux_properties/pages/add_listing_img1.dart';
-import 'package:heureux_properties/utils.dart';
+
+import '../utils.dart';
+import 'add_listing_img1.dart';
 
 class AddListingPage extends StatefulWidget {
   const AddListingPage({Key? key}) : super(key: key);
@@ -9,8 +12,19 @@ class AddListingPage extends StatefulWidget {
   State<AddListingPage> createState() => _AddListingPageState();
 }
 
+String propertyID =
+    "${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}${DateTime.now().millisecond}";
+
 class _AddListingPageState extends State<AddListingPage> {
-  String? propertyName, propertyLocation, propertyPrice, shortDescription;
+  String? username = FirebaseAuth.instance.currentUser!.displayName.toString();
+
+  String? propertyName,
+      propertyLocation,
+      propertyPrice,
+      propertyDescription,
+      propertyTag;
+
+  bool loading = false;
 
   // Note: This is a `GlobalKey<FormState>`,
   // not a GlobalKey<MyCustomFormState>.
@@ -45,32 +59,10 @@ class _AddListingPageState extends State<AddListingPage> {
                   if (value == null || value.isEmpty) {
                     return 'Enter name of your property';
                   }
+                  return null;
                 },
                 decoration: InputDecoration(
                   label: const Text("Property Name"),
-                  isCollapsed: false,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-                onChanged: (value) async {
-                  propertyLocation = value;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Enter location of your property';
-                  }
-                },
-                decoration: InputDecoration(
-                  label: const Text("Location"),
                   isCollapsed: false,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -91,6 +83,7 @@ class _AddListingPageState extends State<AddListingPage> {
                   if (value == null || value.isEmpty) {
                     return 'Enter price of your property';
                   }
+                  return null;
                 },
                 decoration: InputDecoration(
                   label: const Text("Price"),
@@ -106,15 +99,40 @@ class _AddListingPageState extends State<AddListingPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.next,
+                onChanged: (value) async {
+                  propertyLocation = value;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter location of your property';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  label: const Text("Location"),
+                  isCollapsed: false,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 onChanged: (value) async {
-                  shortDescription = value;
+                  propertyDescription = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Enter short description of your property';
                   }
+                  return null;
                 },
                 minLines: 6,
                 maxLines: 8,
@@ -130,24 +148,131 @@ class _AddListingPageState extends State<AddListingPage> {
                 ),
               ),
               const SizedBox(height: 20),
+              const Text("Select property tag:"),
+              Wrap(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: RadioMenuButton(
+                      value: "For Sale",
+                      groupValue: propertyTag,
+                      onChanged: (value) {
+                        setState(() {
+                          propertyTag = value;
+                        });
+                      },
+                      child: const Text("For Sale"),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 120,
+                    child: RadioMenuButton(
+                      value: "For Lease",
+                      groupValue: propertyTag,
+                      onChanged: (value) {
+                        setState(() {
+                          propertyTag = value;
+                        });
+                      },
+                      child: const Text("For Lease"),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 120,
+                    child: RadioMenuButton(
+                      value: "For Rent",
+                      groupValue: propertyTag,
+                      onChanged: (value) {
+                        setState(() {
+                          propertyTag = value;
+                        });
+                      },
+                      child: const Text("For Rent"),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
               OutlinedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
-                    nextPage(context: context, page: const AddListingImg1());
+                  onPressed: () async {
+                    if (propertyTag == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please select property tag."),
+                        ),
+                      );
+                    }
+
+                    if (_formKey.currentState!.validate() &&
+                        propertyTag != null) {
+                      Map<String, dynamic> propertyData = {
+                        "id": propertyID,
+                        "name": propertyName,
+                        "price": propertyPrice,
+                        "location": propertyLocation,
+                        "description": propertyDescription,
+                        "tag": propertyTag,
+                        "username": username,
+                        "img 1 URL": "",
+                        "img 2 URL": "",
+                        "img 3 URL": "",
+                        "img 4 URL": "",
+                        "img 5 URL": "",
+                      };
+
+                      setState(() {
+                        loading = true;
+                      });
+
+                      await FirebaseFirestore.instance
+                          .collection("listings")
+                          .doc(propertyID)
+                          .set(propertyData)
+                          .whenComplete(() {
+                        setState(() {
+                          loading = false;
+                        });
+
+                        return nextPage(
+                            context: context, page: const AddListingImg1());
+                      }).onError(
+                        (error, stackTrace) =>
+                            ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "An error occurred, PLease ensure you are connected to the internet"),
+                          ),
+                        ),
+                      );
+
+                      setState(() {
+                        loading = false;
+                      });
+                    }
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.camera_outlined),
-                      const SizedBox(width: 20),
-                      Text(
-                        "Add Images",
-                        style: TextStyle(color: Theme.of(context).primaryColor),
-                      ),
-                      const SizedBox(width: 20),
-                      const Icon(Icons.navigate_next),
-                    ],
-                  ))
+                  child: loading
+                      ? Center(
+                          child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ))
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.camera_outlined),
+                            const SizedBox(width: 20),
+                            Text(
+                              "Add Images",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                            const SizedBox(width: 20),
+                            const Icon(Icons.navigate_next),
+                          ],
+                        ))
             ],
           ),
         ),

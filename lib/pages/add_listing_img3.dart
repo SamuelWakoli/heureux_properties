@@ -1,10 +1,15 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:heureux_properties/pages/add_listing_img4.dart';
 import 'package:heureux_properties/utils.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'add_listing.dart';
 
 class AddListingImg3 extends StatefulWidget {
   const AddListingImg3({Key? key}) : super(key: key);
@@ -54,14 +59,27 @@ class _AddListingImg3State extends State<AddListingImg3> {
                   fit: BoxFit.fill,
                 )),
           ),
-          showErrorText ? const SizedBox(height: 10) : const SizedBox(),
-          Text(showErrorText
-              ? "Sorry, we were unable to upload your image. Please check your internet connection and try again."
-              : ""),
           const SizedBox(height: 20),
           ElevatedButton(
               onPressed: () async {
                 if (image != null) {
+                  // after 20 seconds, if not navigated to the next page, tell
+                  // user to try agan
+                  Timer(const Duration(seconds: 20), () {
+                    if (!navigatedToNextPage) {
+                      setState(() {
+                        loading = false;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Please ensure you are connected to the internet and try again'),
+                          duration: Duration(seconds: 4),
+                        ),
+                      );
+                    }
+                  });
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Uploading image...'),
@@ -73,19 +91,51 @@ class _AddListingImg3State extends State<AddListingImg3> {
                     loading = true;
                   });
 
-                  nextPage(context: context, page: const AddListingImg4());
-                  loading = false;
+                  String? img3URL;
+
+                  // upload image to storage
+                  await FirebaseStorage.instance
+                      .ref("property images")
+                      .child("$propertyID/image 3.png")
+                      .putFile(image!)
+                      .then((snapshot) {
+                    img3URL = snapshot.ref.getDownloadURL().toString();
+                  }).whenComplete(() async {
+                    // upload image url
+                    if (img3URL != null) {
+                      Map<String, dynamic> data = {"img 3 URL": img3URL};
+                      await FirebaseFirestore.instance
+                          .collection("listings")
+                          .doc(propertyID)
+                          .update(data)
+                          .whenComplete(() {
+                        setState(() {
+                          loading = false;
+                        });
+                        navigatedToNextPage = true;
+                        return nextPage(
+                            context: context, page: const AddListingImg4());
+                      }).onError((error, stackTrace) =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Error: $error"))));
+                    }
+                  });
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                        content: Text('Please add third image to continue')),
+                        content: Text(
+                            'Please add property display image to continue')),
                   );
                 }
               },
               child: loading
                   ? Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     )
                   : Row(
@@ -110,7 +160,7 @@ class _AddListingImg3State extends State<AddListingImg3> {
     }
   }
 
-  bool loading = false, showErrorText = false, navigatedToNextPage = false;
+  bool loading = false, navigatedToNextPage = false;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +174,10 @@ class _AddListingImg3State extends State<AddListingImg3> {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
             ListTile(
-              title: Text("Add third image:"),
+              title: Text(
+                "Add third image:",
+                style: TextStyle(fontSize: 18),
+              ),
             ),
             Column(children: [
               Row(

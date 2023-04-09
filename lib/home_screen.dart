@@ -74,6 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .doc(userEmail)
           .update(userData);
       print("UPDATING USER");
+
+      // TODO: get a list of bookmarks
     });
   }
 
@@ -318,22 +320,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: ListView(
-        children: [
-          homeCard(context: context, propertyImg: 'assets/property1.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property2.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property3.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property4.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property5.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property6.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property1.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property2.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property3.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property4.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property5.jpg'),
-          homeCard(context: context, propertyImg: 'assets/property6.jpg'),
-        ],
-      ),
+      body: StreamBuilder(
+          stream:
+              FirebaseFirestore.instance.collection("properties").snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ));
+            }
+            return ListView(
+              children: [
+                homeCard(context: context, propertyImg: 'assets/property1.jpg'),
+              ],
+            );
+          }),
     );
   }
 }

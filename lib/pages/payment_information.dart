@@ -40,6 +40,7 @@ class _PaymentInfoState extends State<PaymentInfo> {
               );
             }
 
+            // TODO: get doc fields
             return ListView(
               children: snapshot.data!.docs
                   .map((doc) => const ListTile(
