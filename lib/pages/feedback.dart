@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackPage extends StatefulWidget {
@@ -9,6 +13,8 @@ class FeedbackPage extends StatefulWidget {
 
 class _FeedbackPageState extends State<FeedbackPage> {
   String feedbackText = '';
+  String? username = FirebaseAuth.instance.currentUser!.displayName.toString();
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,54 +54,80 @@ class _FeedbackPageState extends State<FeedbackPage> {
             padding: const EdgeInsets.all(8.0),
             child: MaterialButton(
               onPressed: () async {
-                // if (issueText == '') {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     const SnackBar(
-                //       content: Text('Please type your issue'),
-                //     ),
-                //   );
-                // } else {
-                //   Map<String, dynamic> data = {
-                //     'issue': issueText,
-                //     'read': false
-                //   };
-                //   await FirebaseFirestore.instance
-                //       .collection('issues')
-                //       .doc("${getUserName()} ${DateTime.now()}")
-                //       .set(data)
-                //       .whenComplete(
-                //     () {
-                //       showDialog(
-                //           context: context,
-                //           builder: (ctx) {
-                //             return const AlertDialog(
-                //               title: Text('Report Sent'),
-                //               content: Text(
-                //                   'Thank you for reporting an issue to us. We will review it fix it.'),
-                //             );
-                //           });
-                //     },
-                //   );
-                // }
+                if (feedbackText == '') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please type your feedback'),
+                    ),
+                  );
+                } else {
+                  Timer(const Duration(seconds: 20), () {
+                    setState(() {
+                      loading = false;
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please try again")));
+                  });
+
+                  Map<String, dynamic> data = {
+                    'feedback': feedbackText,
+                    'name': username,
+                    'read': false
+                  };
+
+                  setState(() {
+                    loading = true;
+                  });
+
+                  await FirebaseFirestore.instance
+                      .collection('feedbacks')
+                      .doc("${DateTime.now()}")
+                      .set(data)
+                      .whenComplete(
+                    () {
+                      setState(() {
+                        loading = false;
+                      });
+
+                      showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return const AlertDialog(
+                              title: Text('Feedback Sent'),
+                              content: Text('Thank you for your feedback :)'),
+                            );
+                          });
+                    },
+                  );
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Send',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                child: loading
+                    ? Center(
+                        child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            )))
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Send',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Icon(
+                            Icons.send_outlined,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Icon(
-                      Icons.send_outlined,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ],
-                ),
               ),
             ),
           ),
