@@ -44,8 +44,8 @@ class _MyPropertiesState extends State<MyProperties> {
                       color: Theme.of(context).primaryColor,
                       size: 128,
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       "You have not yet purchased any property",
                       style: TextStyle(fontSize: 18),
                     ),
@@ -54,12 +54,21 @@ class _MyPropertiesState extends State<MyProperties> {
               );
             }
 
-            // TODO: get doc fields
             return ListView(
-              children: [
-                myPropertiesCard(
-                    context: context, propertyImg: "assets/property1.jpg"),
-              ],
+              children: snapshot.data!.docs
+                  .map(
+                    (doc) => myPropertiesCard(
+                      context: context,
+                      id: doc.id,
+                      propertyDisplayImg: doc['img 1 URL'],
+                      propertyName: doc['name'],
+                      propertyPrice: doc['price'],
+                      propertyLocation: doc['location'],
+                      propertyTag: doc['tag'],
+                      propertyType: doc['type'],
+                    ),
+                  )
+                  .toList(),
             );
           }),
     );

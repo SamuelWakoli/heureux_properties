@@ -2,13 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 /// Creates card for the My Listings Page
-Widget myListingsCard(
-    {required context,
-    id,
-    required propertyImg,
-    propertyName,
-    propertyPrice,
-    propertyLocation}) {
+Widget myListingsCard({
+  required context,
+  required String id,
+  required String propertyDisplayImg,
+  required String propertyName,
+  required String propertyPrice,
+  required String propertyLocation,
+  required String propertyTag,
+  required String propertyType,
+}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Card(
@@ -25,7 +28,7 @@ Widget myListingsCard(
               height: 200,
               child: CachedNetworkImage(
                 fit: BoxFit.fill,
-                imageUrl: propertyImg,
+                imageUrl: propertyDisplayImg,
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     CircularProgressIndicator(
                   value: downloadProgress.progress,
@@ -36,16 +39,18 @@ Widget myListingsCard(
             ),
           ),
           ListTile(
-            title: const Text("Property Name"),
+            title: Text(propertyName),
             subtitle: Text(
-                "For Sale | Price: Ksh. 1,000,000\nLocation: propertyLocation"),
+                "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation"),
             trailing: IconButton(
               tooltip: "Remove",
               icon: const Icon(
                 Icons.delete_forever_outlined,
                 color: Colors.red,
               ),
-              onPressed: () {},
+              onPressed: () {
+                // tell admin to delete property listing
+              },
             ),
           ),
         ],

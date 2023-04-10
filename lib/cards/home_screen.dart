@@ -97,7 +97,16 @@ Widget homeCard({
     );
   }
 
-  //TODO: check filters
+  /// call these global variables when applying filter
+// Property category
+  //bool forRent = false, forLease = false, forSale = false, allCategory = true;
+
+// Property type
+  // bool farm = false, land = false, plot = false, ranch = false, allType = true;
+
+// Property location
+  // String propertyLocation = "All locations";
+
   // Filtering categories
   Widget filterCategories() {
     // 1. All categories, All types

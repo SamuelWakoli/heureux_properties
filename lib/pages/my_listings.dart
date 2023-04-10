@@ -49,7 +49,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                         size: 128,
                       ),
                       const SizedBox(height: 20),
-                      Text(
+                      const Text(
                         "Click the button below to sell/lease your property with us",
                         style: TextStyle(fontSize: 18),
                       ),
@@ -59,12 +59,21 @@ class _MyListingsPageState extends State<MyListingsPage> {
               );
             }
 
-            // TODO: get doc fields
             return ListView(
-              children: [
-                myListingsCard(
-                    context: context, propertyImg: "assets/property1.jpg"),
-              ],
+              children: snapshot.data!.docs
+                  .map(
+                    (doc) => myListingsCard(
+                      context: context,
+                      id: doc.id,
+                      propertyDisplayImg: doc['img 1 URL'],
+                      propertyName: doc['name'],
+                      propertyPrice: doc['price'],
+                      propertyLocation: doc['location'],
+                      propertyTag: doc['tag'],
+                      propertyType: doc['type'],
+                    ),
+                  )
+                  .toList(),
             );
           }),
       floatingActionButton: FloatingActionButton(

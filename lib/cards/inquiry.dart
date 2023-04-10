@@ -6,13 +6,16 @@ import '../utils.dart';
 import 'card_functions.dart';
 
 /// Creates card for the Inquiry  Page
-Widget inquiryCard(
-    {required context,
-    required id,
-    required propertyImg,
-    propertyName,
-    propertyPrice,
-    propertyLocation}) {
+Widget inquiryCard({
+  required context,
+  required String id,
+  required String propertyDisplayImg,
+  required String propertyName,
+  required String propertyPrice,
+  required String propertyLocation,
+  required String propertyTag,
+  required String propertyType,
+}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Card(
@@ -26,7 +29,7 @@ Widget inquiryCard(
             borderRadius: BorderRadius.circular(18.0),
             child: CachedNetworkImage(
               fit: BoxFit.fill,
-              imageUrl: propertyImg,
+              imageUrl: propertyDisplayImg,
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   CircularProgressIndicator(
                 value: downloadProgress.progress,
@@ -36,9 +39,9 @@ Widget inquiryCard(
             ),
           ),
           ListTile(
-            title: const Text("Property Name"),
+            title: Text(propertyName),
             subtitle: Text(
-                "For Sale | Price: Ksh. 1,000,000\nLocation: propertyLocation"),
+                "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

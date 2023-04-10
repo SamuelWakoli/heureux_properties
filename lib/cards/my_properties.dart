@@ -2,13 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 /// Creates card for the My Properties Page
-Widget myPropertiesCard(
-    {required context,
-    id,
-    required propertyImg,
-    propertyName,
-    propertyPrice,
-    propertyLocation}) {
+Widget myPropertiesCard({
+  required context,
+  required String id,
+  required String propertyDisplayImg,
+  required String propertyName,
+  required String propertyPrice,
+  required String propertyLocation,
+  required String propertyTag,
+  required String propertyType,
+}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Card(
@@ -25,7 +28,7 @@ Widget myPropertiesCard(
               height: 200,
               child: CachedNetworkImage(
                 fit: BoxFit.fill,
-                imageUrl: propertyImg,
+                imageUrl: propertyDisplayImg,
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     CircularProgressIndicator(
                   value: downloadProgress.progress,
@@ -35,10 +38,10 @@ Widget myPropertiesCard(
               ),
             ),
           ),
-          const ListTile(
-            title: Text("Property Name\nPrice: Ksh. 1,000,000"),
+          ListTile(
+            title: Text(propertyName),
             subtitle: Text(
-                "For Sale | Price: Ksh. 1,000,000\nLocation: propertyLocation\nFully Paid"),
+                "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation\nFully Paid"),
           ),
         ],
       ),

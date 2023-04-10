@@ -7,13 +7,16 @@ import '../utils.dart';
 import 'card_functions.dart';
 
 /// Creates a bookmark card widget at the Bookmarks Page
-Widget bookmarkCard(
-    {required context,
-    id,
-    required propertyImg,
-    propertyName,
-    propertyPrice,
-    propertyLocation}) {
+Widget bookmarkCard({
+  required context,
+  required String id,
+  required String propertyDisplayImg,
+  required String propertyName,
+  required String propertyPrice,
+  required String propertyLocation,
+  required String propertyTag,
+  required String propertyType,
+}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Card(
@@ -30,7 +33,7 @@ Widget bookmarkCard(
               height: 200,
               child: CachedNetworkImage(
                 fit: BoxFit.fill,
-                imageUrl: propertyImg,
+                imageUrl: propertyDisplayImg,
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     CircularProgressIndicator(
                   value: downloadProgress.progress,
@@ -40,10 +43,10 @@ Widget bookmarkCard(
               ),
             ),
           ),
-          const ListTile(
-            title: Text("Property Name"),
+          ListTile(
+            title: Text(propertyName),
             subtitle: Text(
-                "For Sale | Price: Ksh. 1,000,000\nLocation: propertyLocation"),
+                "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

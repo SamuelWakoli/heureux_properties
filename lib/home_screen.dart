@@ -336,16 +336,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text("No property added to the database"));
             }
 
-            /// call these global variables when applying filter
-// Property category
-            //bool forRent = false, forLease = false, forSale = false, allCategory = true;
-
-// Property type
-            // bool farm = false, land = false, plot = false, ranch = false, allType = true;
-
-// Property location
-            // String propertyLocation = "All locations";
-
             return ListView(
               children: snapshot.data!.docs
                   .map((doc) => homeCard(

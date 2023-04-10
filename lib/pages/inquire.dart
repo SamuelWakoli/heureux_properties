@@ -36,11 +36,33 @@ class _InquirePageState extends State<InquirePage> {
       ),
       body: ListView(
         children: [
-          inquiryCard(
-              context: context,
-              id: currentPropertyID,
-              propertyImg: "assets/property1.jpg"),
-          SizedBox(height: 20),
+          StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("properties")
+                  .doc(currentPropertyID)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  ));
+                }
+
+                dynamic doc = snapshot.data;
+
+                return inquiryCard(
+                  context: context,
+                  id: doc.id,
+                  propertyDisplayImg: doc['img 1 URL'],
+                  propertyName: doc['name'],
+                  propertyPrice: doc['price'],
+                  propertyLocation: doc['location'],
+                  propertyTag: doc['tag'],
+                  propertyType: doc['type'],
+                );
+              }),
+          const SizedBox(height: 20),
           const ListTile(
             title: Text("Please confirm your information:"),
           ),
@@ -260,7 +282,7 @@ class _InquirePageState extends State<InquirePage> {
                             fontSize: 18,
                             color: Theme.of(context).primaryColor),
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Icon(
                         Icons.send_to_mobile_outlined,
                         size: 32,
