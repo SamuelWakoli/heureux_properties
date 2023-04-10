@@ -330,10 +330,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Theme.of(context).primaryColor,
               ));
             }
+
+            if (snapshot.data!.docs.isEmpty) {
+              return const Center(
+                  child: Text("No property added to the database"));
+            }
+
+            /// call these global variables when applying filter
+// Property category
+            //bool forRent = false, forLease = false, forSale = false, allCategory = true;
+
+// Property type
+            // bool farm = false, land = false, plot = false, ranch = false, allType = true;
+
+// Property location
+            // String propertyLocation = "All locations";
+
             return ListView(
-              children: [
-                homeCard(context: context, propertyImg: 'assets/property1.jpg'),
-              ],
+              children: snapshot.data!.docs
+                  .map((doc) => homeCard(
+                        context: context,
+                        id: doc.id,
+                        propertyDisplayImg: doc['img 1 URL'],
+                        propertyName: doc['name'],
+                        propertyPrice: doc['price'],
+                        propertyLocation: doc['location'],
+                        propertyTag: doc['tag'],
+                        propertyType: doc['type'],
+                      ))
+                  .toList(),
             );
           }),
     );
