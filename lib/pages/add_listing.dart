@@ -22,7 +22,8 @@ class _AddListingPageState extends State<AddListingPage> {
       propertyLocation,
       propertyPrice,
       propertyDescription,
-      propertyTag;
+      propertyTag,
+      propertyType;
 
   bool loading = false;
 
@@ -150,6 +151,7 @@ class _AddListingPageState extends State<AddListingPage> {
               const SizedBox(height: 20),
               const Text("Select property tag:"),
               Wrap(
+                alignment: WrapAlignment.center,
                 children: [
                   SizedBox(
                     width: 120,
@@ -193,6 +195,65 @@ class _AddListingPageState extends State<AddListingPage> {
                 ],
               ),
               const SizedBox(height: 20),
+              const Text("Select property type:"),
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 140,
+                    child: RadioMenuButton(
+                      value: "Farm",
+                      groupValue: propertyType,
+                      onChanged: (value) {
+                        setState(() {
+                          propertyType = value;
+                        });
+                      },
+                      child: const Text("Farm"),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 140,
+                    child: RadioMenuButton(
+                      value: "Land",
+                      groupValue: propertyType,
+                      onChanged: (value) {
+                        setState(() {
+                          propertyType = value;
+                        });
+                      },
+                      child: const Text("Land"),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 140,
+                    child: RadioMenuButton(
+                      value: "Plot",
+                      groupValue: propertyType,
+                      onChanged: (value) {
+                        setState(() {
+                          propertyType = value;
+                        });
+                      },
+                      child: const Text("Plot"),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 140,
+                    child: RadioMenuButton(
+                      value: "Ranch",
+                      groupValue: propertyType,
+                      onChanged: (value) {
+                        setState(() {
+                          propertyType = value;
+                        });
+                      },
+                      child: const Text("Ranch"),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
               OutlinedButton(
                   onPressed: () async {
                     if (propertyTag == null) {
@@ -212,6 +273,7 @@ class _AddListingPageState extends State<AddListingPage> {
                         "location": propertyLocation,
                         "description": propertyDescription,
                         "tag": propertyTag,
+                        "type": propertyType,
                         "username": username,
                         "img 1 URL": "",
                         "img 2 URL": "",

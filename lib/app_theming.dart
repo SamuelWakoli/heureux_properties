@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 var myPrimaryColor = const Color(0xFFBF9000);
-var myPrimaryColoryDark = const Color(0xFFFFC000);
+var myPrimaryColorDark = const Color(0xFFFFC000);
 
 var lightThemeData = ThemeData(
   primaryColor: myPrimaryColor,
@@ -49,28 +49,28 @@ var darkThemeData = ThemeData(
   primaryColor: const Color(0xFFBF9000),
   useMaterial3: true,
   brightness: Brightness.dark,
-  indicatorColor: myPrimaryColoryDark,
+  indicatorColor: myPrimaryColorDark,
   visualDensity: VisualDensity.adaptivePlatformDensity,
   cardTheme: CardTheme(
     elevation: 8,
-    shadowColor: myPrimaryColoryDark,
-    surfaceTintColor: myPrimaryColoryDark,
+    shadowColor: myPrimaryColorDark,
+    surfaceTintColor: myPrimaryColorDark,
   ),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: myPrimaryColoryDark)),
+        borderSide: BorderSide(color: myPrimaryColorDark)),
   ),
-  drawerTheme: DrawerThemeData(surfaceTintColor: myPrimaryColoryDark),
-  popupMenuTheme: PopupMenuThemeData(surfaceTintColor: myPrimaryColoryDark),
-  dialogTheme: DialogTheme(surfaceTintColor: myPrimaryColoryDark),
+  drawerTheme: DrawerThemeData(surfaceTintColor: myPrimaryColorDark),
+  popupMenuTheme: PopupMenuThemeData(surfaceTintColor: myPrimaryColorDark),
+  dialogTheme: DialogTheme(surfaceTintColor: myPrimaryColorDark),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       surfaceTintColor: MaterialStateProperty.resolveWith((states) {
-        return myPrimaryColoryDark;
+        return myPrimaryColorDark;
       }),
       textStyle: MaterialStateProperty.resolveWith((states) {
-        return TextStyle(color: myPrimaryColoryDark);
+        return TextStyle(color: myPrimaryColorDark);
       }),
     ),
   ),
