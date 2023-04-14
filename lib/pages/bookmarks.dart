@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heureux_properties/cards/bookmarks.dart';
 
+import '../cards/card_functions.dart';
+
 class Bookmarks extends StatefulWidget {
   const Bookmarks({Key? key}) : super(key: key);
 
@@ -21,11 +23,8 @@ class _BookmarksState extends State<Bookmarks> {
         title: const Text('Bookmarks'),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection("users")
-              .doc(userEmail)
-              .collection("bookmarks")
-              .snapshots(),
+          stream:
+              FirebaseFirestore.instance.collection("properties").snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(
@@ -34,7 +33,7 @@ class _BookmarksState extends State<Bookmarks> {
               ));
             }
 
-            if (snapshot.data!.docs.isEmpty) {
+            if (favoriteProperties.isEmpty) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

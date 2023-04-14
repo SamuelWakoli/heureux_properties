@@ -95,20 +95,20 @@ class _EditProfileImgState extends State<EditProfileImg> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Edit Profile Picture"),
+        title: const Text("Edit Profile Picture"),
       ),
       body: Column(
         children: [
-          Center(
+          const Center(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(20.0),
               child: Text(
                 "Select image from:",
                 style: TextStyle(fontSize: 20),
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           OutlinedButton(
               onPressed: () async => pickImageGallery(),
               child: SizedBox(
@@ -116,11 +116,11 @@ class _EditProfileImgState extends State<EditProfileImg> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.image_outlined,
                       size: 32,
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
                       "Gallery",
                       style: TextStyle(
@@ -131,7 +131,7 @@ class _EditProfileImgState extends State<EditProfileImg> {
                   ],
                 ),
               )),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           OutlinedButton(
               onPressed: () async => pickImageCamera(),
               child: SizedBox(
@@ -139,11 +139,11 @@ class _EditProfileImgState extends State<EditProfileImg> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.camera_outlined,
                       size: 32,
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
                       "Camera",
                       style: TextStyle(
@@ -154,9 +154,9 @@ class _EditProfileImgState extends State<EditProfileImg> {
                   ],
                 ),
               )),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           _getImage(),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           ElevatedButton(
               onPressed: () async {
                 if (image == null) {
@@ -222,11 +222,14 @@ class _EditProfileImgState extends State<EditProfileImg> {
                           Icon(
                             Icons.save,
                             size: 32,
+                            color: Theme.of(context).primaryColor,
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           Text(
                             "Save",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).primaryColor),
                           ),
                         ],
                       ),

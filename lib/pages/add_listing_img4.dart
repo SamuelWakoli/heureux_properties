@@ -98,8 +98,8 @@ class _AddListingImg4State extends State<AddListingImg4> {
                       .ref("property images")
                       .child("$propertyID/image 4.png")
                       .putFile(image!)
-                      .then((snapshot) {
-                    img4URL = snapshot.ref.getDownloadURL().toString();
+                      .then((snapshot) async {
+                    img4URL = await snapshot.ref.getDownloadURL();
                   }).whenComplete(() async {
                     // upload image url
                     if (img4URL != null) {

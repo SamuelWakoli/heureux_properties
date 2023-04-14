@@ -1,10 +1,10 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:heureux_properties/connection_check.dart';
 import 'package:heureux_properties/pages/about_us.dart';
 import 'package:heureux_properties/pages/bookmarks.dart';
 import 'package:heureux_properties/pages/feedback.dart';
@@ -14,6 +14,7 @@ import 'package:heureux_properties/pages/my_properties.dart';
 import 'package:heureux_properties/pages/profile.dart';
 import 'package:heureux_properties/pages/report_issue.dart';
 
+import 'cards/card_functions.dart';
 import 'cards/home_screen.dart';
 import 'utils.dart';
 
@@ -23,6 +24,8 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
+bool? isInternetOn;
 
 class _HomeScreenState extends State<HomeScreen> {
   // this is the styling text for Drawer Menu list tiles
@@ -35,47 +38,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
 
-    // wait for 5 seconds for the home screen to load
-    Timer(const Duration(seconds: 5), () async {
-      print("STARTING TASKS");
-
-      /// To get number of users in the admin app, send user email to the
-      /// FireStore.
-      /// Fields to add: email, app start time,
-      String appStartTime =
-          "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} at ${DateTime.now().hour}:${DateTime.now().minute}/";
-      Map<String, dynamic> userData = {
-        "id": userEmail,
-        "name": username,
-        "app start time": appStartTime,
-      };
-
+    Future.delayed(const Duration(), () async {
       // check if user does not exist
-      bool userNotExistInDB = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(userEmail)
-          .snapshots()
-          .isEmpty;
-
-      if (userNotExistInDB) {
-        // true -> call set
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(userEmail)
-            .set(userData);
-
-        print("CREATING USER");
+      dynamic userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(userEmail);
+      dynamic doc = await userDocRef.get();
+      if (!doc.exists) {
+        doesUserExists = false;
+      } else {
+        doesUserExists = true;
       }
 
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(userEmail)
-          .update(userData);
-      print("UPDATING USER");
-
-      // TODO: get a list of bookmarks
+      if (doesUserExists == true && doesUserExists != null) {
+        favoriteProperties = await userDocRef.get("favoriteProperties");
+      }
     });
   }
 
@@ -197,8 +176,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 48,
             ),
-
-            // TODO: Replace this Tile when user created profile
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: Card(
@@ -235,16 +212,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: drawerOptionsTextStyle,
                     ),
                     subtitle: Text(userEmail!),
-                    onTap: () {
-                      nextPage(context: context, page: const ProfilePage());
+                    onTap: () async {
+                      dynamic connectivityResult =
+                          await (Connectivity().checkConnectivity());
+                      if (connectivityResult == ConnectivityResult.mobile) {
+                        // I am connected to a mobile network.
+                        isInternetOn = true;
+                      } else if (connectivityResult ==
+                          ConnectivityResult.wifi) {
+                        // I am connected to a wifi network.
+                        isInternetOn = true;
+                      } else if (connectivityResult ==
+                          ConnectivityResult.other) {
+                        // I am connected to a network which is not in the above mentioned networks.
+                        //isInternetOn = true;
+                      } else if (connectivityResult ==
+                          ConnectivityResult.none) {
+                        // I am not connected to any network.
+                        isInternetOn = false;
+                      }
+
+                      print("INTERNET CONN: $isInternetOn");
+                      nextPage(
+                          context: context,
+                          page: isInternetOn!
+                              ? const ProfilePage()
+                              : const ConnectionCheck());
                     },
                   ),
                 ),
               ),
             ),
-
             const SizedBox(height: 20),
-
             ListTile(
               leading: Icon(
                 Icons.collections_bookmark_outlined,
@@ -258,7 +257,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 nextPage(context: context, page: const Bookmarks());
               },
             ),
-
             ListTile(
               leading: Icon(
                 Icons.business,
@@ -272,7 +270,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 nextPage(context: context, page: const MyProperties());
               },
             ),
-
             ListTile(
               leading: Icon(
                 Icons.list_alt_rounded,
@@ -287,7 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 nextPage(context: context, page: const MyListingsPage());
               },
             ),
-
             ListTile(
               leading: Icon(
                 Icons.feedback_outlined,
@@ -302,7 +298,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 nextPage(context: context, page: const FeedbackPage());
               },
             ),
-
             ListTile(
               leading: Icon(
                 Icons.info_outline_rounded,

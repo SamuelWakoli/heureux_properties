@@ -96,8 +96,8 @@ class _AddListingImg5State extends State<AddListingImg5> {
                       .ref("property images")
                       .child("$propertyID/image 5.png")
                       .putFile(image!)
-                      .then((snapshot) {
-                    img5URL = snapshot.ref.getDownloadURL().toString();
+                      .then((snapshot) async {
+                    img5URL = await snapshot.ref.getDownloadURL();
                   }).whenComplete(() async {
                     // upload image url
                     if (img5URL != null) {
@@ -125,11 +125,28 @@ class _AddListingImg5State extends State<AddListingImg5> {
                                     "for listing your property in our app. We will "
                                     "contact you for any information needed before "
                                     "further inspections and approval"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .popUntil((route) => route.isFirst);
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Icon(Icons.home_outlined),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Text("Open Home Page"),
+                                        ],
+                                      ))
+                                ],
                               );
                             });
-
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
                       }).onError((error, stackTrace) =>
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text("Error: $error"))));

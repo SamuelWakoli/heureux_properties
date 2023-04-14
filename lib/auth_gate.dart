@@ -26,6 +26,7 @@ class _AuthGateState extends State<AuthGate> {
             },
           );
         }
+
         return const HomeScreen();
       },
     );

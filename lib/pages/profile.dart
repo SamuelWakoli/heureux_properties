@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +9,7 @@ import 'package:heureux_properties/pages/help_support.dart';
 import 'package:heureux_properties/pages/payment_information.dart';
 import 'package:heureux_properties/utils.dart';
 
+import '../home_screen.dart';
 import 'edit_profile_img.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -30,6 +33,66 @@ class _ProfilePageState extends State<ProfilePage> {
   String newName = "", newPhone = "";
 
   bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (isInternetOn != null && isInternetOn == true) {
+      Timer(Duration.zero, () async {
+        print("CHECK IF USER'S DOC EXIST\nSTART");
+        String userEmail = FirebaseAuth.instance.currentUser!.email!;
+        String appStartTime =
+            "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} at ${DateTime.now().hour}:${DateTime.now().minute}/";
+        Map<String, dynamic> userData = {
+          "id": userEmail,
+          "name": username,
+          "app start time": appStartTime,
+          "phone": "Edit phone number"
+        };
+        print("STARTING TASKS: CREATED MAP");
+
+        print("CHECKING IF THERE IS DATA IN DB");
+
+        // check if user does not exist
+        bool? doesUserExits;
+        dynamic userDocRef =
+            FirebaseFirestore.instance.collection('users').doc(userEmail);
+        dynamic doc = await userDocRef.get();
+        if (!doc.exists) {
+          doesUserExits = false;
+        } else {
+          doesUserExits = true;
+        }
+
+        print("CREATING USER: ${!doesUserExits}");
+        if (!doesUserExits) {
+          // false -> call set
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(userEmail)
+              .set(userData);
+        } else {
+          // TODO: get bookmarks
+          // update app start
+          userData = {
+            "app start time": appStartTime,
+          };
+
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(userEmail)
+              .update(userData);
+          print("UPDATED APP START TIME");
+
+          print("GETTING USERNAME");
+          userPhone = userDocRef.get("phone").toString();
+        }
+
+        print("END");
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +222,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text("No changes made.")));
+                                  setState(() {
+                                    editingName = false;
+                                  });
                                 }
                               },
                               child: loading
@@ -241,6 +307,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     setState(() {
                                       loading = false;
                                     });
+                                    nextPageReplace(
+                                        context: context,
+                                        page: const ProfilePage());
                                   }).onError((error, stackTrace) {
                                     setState(() {
                                       loading = false;
@@ -254,6 +323,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text("No changes made.")));
+                                  setState(() {
+                                    editingPhone = false;
+                                  });
                                 }
                               },
                               child: loading
@@ -281,12 +353,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               return Text(userPhone!,
                                   style: const TextStyle(fontSize: 20));
                             }
-
-                            if (!snapshot.data!.exists) {
-                              return Text(userPhone!,
-                                  style: const TextStyle(fontSize: 20));
-                            }
-                            userPhone = snapshot.data!.get("phone").toString();
 
                             return Text(userPhone!,
                                 style: const TextStyle(fontSize: 20));
