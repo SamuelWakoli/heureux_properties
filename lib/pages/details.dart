@@ -25,6 +25,9 @@ class _DetailsPageState extends State<DetailsPage> {
       required String propertyImg,
       required String propertyName,
       required String propertyPrice,
+      required String propertyTag,
+      required String propertyType,
+      required String propertyDescription,
       required String propertyLocation}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -47,25 +50,16 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
           ),
           const SizedBox(height: 20),
-          const ListTile(
-            title: Text.rich(
-              TextSpan(
-                  text: "Property Name\n",
-                  style: TextStyle(fontSize: 20),
-                  children: [
-                    TextSpan(
-                      text:
-                          "For Sale\nPrice: Ksh. 1,000,000\nLocation: propertyLocation\n",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ]),
-            ),
+          ListTile(
+            title: Text(propertyName, style: const TextStyle(fontSize: 18)),
             subtitle: Text.rich(TextSpan(
-                text: "Property description text Property description text "
-                    "Property description text Property description text "
-                    "Property description text Property description text "
-                    "Property description text Property description text",
-                style: TextStyle(fontSize: 16))),
+                text:
+                    "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation\n",
+                children: [
+                  TextSpan(
+                      text: "$propertyDescription}",
+                      style: const TextStyle(fontSize: 16))
+                ])),
           ),
         ],
       ),
@@ -125,12 +119,14 @@ class _DetailsPageState extends State<DetailsPage> {
             return ListView(
               children: [
                 _displayImg(
-                  context: context,
-                  propertyImg: image1Url!,
-                  propertyName: document['name'],
-                  propertyPrice: document['price'],
-                  propertyLocation: document['location'],
-                ),
+                    context: context,
+                    propertyImg: image1Url!,
+                    propertyName: document['name'],
+                    propertyPrice: document['price'],
+                    propertyLocation: document['location'],
+                    propertyType: document['type'],
+                    propertyTag: document['tag'],
+                    propertyDescription: document['description']),
                 const SizedBox(height: 10),
                 _getImages(image2Url!),
                 _getImages(image3Url!),
