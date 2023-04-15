@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../cards/card_functions.dart';
@@ -12,14 +13,19 @@ class DetailsPage extends StatefulWidget {
 
 /// This page uses [currentPropertyID] to load property details.
 class _DetailsPageState extends State<DetailsPage> {
+  String? image1Url = "",
+      image2Url = "",
+      image3Url = "",
+      image4Url = "",
+      image5Url = "";
+
   /// Creates a Details Page card widget
   Widget _displayImg(
       {required context,
-      id,
       required String propertyImg,
-      propertyName,
-      propertyPrice,
-      propertyLocation}) {
+      required String propertyName,
+      required String propertyPrice,
+      required String propertyLocation}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -95,11 +101,44 @@ class _DetailsPageState extends State<DetailsPage> {
         centerTitle: true,
         title: const Text("Details"),
       ),
-      body: ListView(
-        children: [
-          _displayImg(context: context, propertyImg: "assets/property1.jpg"),
-        ],
-      ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("properties")
+              .doc(currentPropertyID)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ));
+            }
+
+            final document = snapshot.data!;
+
+            image1Url = document.get('img 1 URL');
+            image2Url = document.get('img 2 URL');
+            image3Url = document.get('img 3 URL');
+            image4Url = document.get('img 4 URL');
+            image5Url = document.get('img 5 URL');
+
+            return ListView(
+              children: [
+                _displayImg(
+                  context: context,
+                  propertyImg: image1Url!,
+                  propertyName: document['name'],
+                  propertyPrice: document['price'],
+                  propertyLocation: document['location'],
+                ),
+                const SizedBox(height: 10),
+                _getImages(image2Url!),
+                _getImages(image3Url!),
+                _getImages(image4Url!),
+                _getImages(image5Url!),
+              ],
+            );
+          }),
     );
   }
 }
