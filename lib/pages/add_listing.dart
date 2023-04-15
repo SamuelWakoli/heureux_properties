@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../utils.dart';
-import 'add_listing_img1.dart';
+import 'add_location.dart';
 
 class AddListingPage extends StatefulWidget {
   const AddListingPage({Key? key}) : super(key: key);
@@ -16,8 +18,7 @@ String propertyID =
     "${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}${DateTime.now().millisecond}";
 
 class _AddListingPageState extends State<AddListingPage> {
-  String? username = FirebaseAuth.instance.currentUser!.displayName.toString(),
-      userID = FirebaseAuth.instance.currentUser!.email.toString();
+  String? username = FirebaseAuth.instance.currentUser!.displayName.toString();
 
   String? propertyName,
       propertyLocation,
@@ -26,7 +27,7 @@ class _AddListingPageState extends State<AddListingPage> {
       propertyTag,
       propertyType;
 
-  bool loading = false;
+  bool loading = false, showLocations = false, navigatedToNextPage = false;
 
   // Note: This is a `GlobalKey<FormState>`,
   // not a GlobalKey<MyCustomFormState>.
@@ -45,12 +46,6 @@ class _AddListingPageState extends State<AddListingPage> {
           padding: const EdgeInsets.all(8.0),
           child: ListView(
             children: [
-              const Text(
-                  "To sell/rent/lease your property with us, fill in this form,"
-                  " and include 5 images of your property. Upon submission of "
-                  "this form, we will review it and contact your for more "
-                  "inspection of the property before approval."),
-              const SizedBox(height: 20),
               TextFormField(
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
@@ -90,30 +85,6 @@ class _AddListingPageState extends State<AddListingPage> {
                 decoration: InputDecoration(
                   label: const Text("Price"),
                   hintText: "(Ksh)",
-                  isCollapsed: false,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-                onChanged: (value) async {
-                  propertyLocation = value;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Enter location of your property';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  label: const Text("Location"),
                   isCollapsed: false,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -271,14 +242,11 @@ class _AddListingPageState extends State<AddListingPage> {
                         "id": propertyID,
                         "name": propertyName,
                         "price": propertyPrice,
-                        "location": propertyLocation,
+                        "location": "",
                         "description": propertyDescription,
                         "tag": propertyTag,
                         "type": propertyType,
                         "username": username,
-                        "user id": userID,
-                        "state": false,
-                        "approved": false,
                         "img 1 URL": "",
                         "img 2 URL": "",
                         "img 3 URL": "",
@@ -290,6 +258,21 @@ class _AddListingPageState extends State<AddListingPage> {
                         loading = true;
                       });
 
+                      Timer(const Duration(seconds: 20), () {
+                        if (!navigatedToNextPage) {
+                          setState(() {
+                            loading = false;
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please ensure you are connected to the internet and try again'),
+                              duration: Duration(seconds: 4),
+                            ),
+                          );
+                        }
+                      });
+
                       await FirebaseFirestore.instance
                           .collection("listings")
                           .doc(propertyID)
@@ -299,8 +282,10 @@ class _AddListingPageState extends State<AddListingPage> {
                           loading = false;
                         });
 
+                        propertyLocation = "";
+                        navigatedToNextPage = true;
                         return nextPage(
-                            context: context, page: const AddListingImg1());
+                            context: context, page: const AddLocation());
                       }).onError(
                         (error, stackTrace) =>
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -328,10 +313,8 @@ class _AddListingPageState extends State<AddListingPage> {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.camera_outlined),
-                            const SizedBox(width: 20),
                             Text(
-                              "Add Images",
+                              "Add Property Location",
                               style: TextStyle(
                                   color: Theme.of(context).primaryColor),
                             ),

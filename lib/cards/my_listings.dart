@@ -36,10 +36,16 @@ Widget myListingsCard({
                   fit: BoxFit.fill,
                   imageUrl: propertyDisplayImg,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColor),
+                      Center(
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor),
+                      ),
+                    ),
                   ),
                 ),
               ),

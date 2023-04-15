@@ -38,10 +38,16 @@ Widget filterCard({
                   fit: BoxFit.fill,
                   imageUrl: propertyDisplayImg,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColor),
+                      Center(
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -147,7 +153,7 @@ Widget filterCard({
       return showCard();
     }
 
-    return const Center(child: Text("Property category not found"));
+    return const SizedBox();
   }
 
   // Filtering type
@@ -167,7 +173,7 @@ Widget filterCard({
     if (ranch == true && propertyType == "Ranch") {
       return filterCategories();
     }
-    return const Center(child: Text("Type not found"));
+    return const SizedBox();
   }
 
   // Generally, filter using location selection
@@ -222,24 +228,5 @@ Widget filterCard({
   if (propertyLocation == "All locations") {
     return filterType();
   }
-  if (propertyLocation != "Eldoret" ||
-      propertyLocation != "Githunguri" ||
-      propertyLocation != "Juja" ||
-      propertyLocation != "Kabete" ||
-      propertyLocation != "Kiambu" ||
-      propertyLocation != "Kikuyu" ||
-      propertyLocation != "Laikipia" ||
-      propertyLocation != "Malaa" ||
-      propertyLocation != "Matuu" ||
-      propertyLocation != "Mombasa" ||
-      propertyLocation != "Nairobi" ||
-      propertyLocation != "Naivasha" ||
-      propertyLocation != "Nakuru" ||
-      propertyLocation != "Ruaka" ||
-      propertyLocation != "Syokimau" ||
-      propertyLocation != "Thika" ||
-      propertyLocation != "All locations") {
-    return filterType();
-  }
-  return const Center(child: Text("Not found"));
+  return const SizedBox();
 }

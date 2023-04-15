@@ -15,8 +15,7 @@ class _FilteredPageState extends State<FilteredPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Results"),
+        title: const Text("Results:"),
       ),
       body: StreamBuilder(
           stream:

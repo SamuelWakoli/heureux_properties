@@ -41,10 +41,16 @@ class _DetailsPageState extends State<DetailsPage> {
                 fit: BoxFit.fill,
                 imageUrl: propertyImg,
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(
-                  value: downloadProgress.progress,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor),
+                    Center(
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -76,11 +82,16 @@ class _DetailsPageState extends State<DetailsPage> {
         child: CachedNetworkImage(
           fit: BoxFit.fill,
           imageUrl: image,
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              CircularProgressIndicator(
-            value: downloadProgress.progress,
-            valueColor:
-                AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+            child: SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                value: downloadProgress.progress,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).primaryColor),
+              ),
+            ),
           ),
           errorWidget: (context, url, error) => const Icon(Icons.error_outline),
         ),
