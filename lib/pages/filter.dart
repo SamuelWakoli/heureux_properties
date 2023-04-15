@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../utils.dart';
+import 'filtered_page.dart';
+
 class FilterPage extends StatefulWidget {
   const FilterPage({Key? key}) : super(key: key);
 
@@ -512,6 +515,15 @@ class _FilterPageState extends State<FilterPage> {
                   child: const Text("All locations")),
             ),
           ],
+        ),
+        SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: OutlinedButton(
+              onPressed: () {
+                nextPage(context: context, page: const FilteredPage());
+              },
+              child: const Text("Done")),
         ),
       ]),
     );

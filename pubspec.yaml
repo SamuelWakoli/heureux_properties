@@ -48,6 +48,7 @@ dependencies:
   connectivity_plus: ^3.0.4
   restart_app: ^1.1.2
   open_settings: ^2.0.2
+  like_button: ^2.0.5
 
 
 
