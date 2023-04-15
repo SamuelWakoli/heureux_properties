@@ -48,16 +48,6 @@ Widget myListingsCard({
               title: Text(propertyName),
               subtitle: Text(
                   "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation\nState: ${state ? (approved ? "Approved" : "Declined") : "Awaiting Review"}"),
-              trailing: IconButton(
-                tooltip: "Remove",
-                icon: const Icon(
-                  Icons.delete_forever_outlined,
-                  color: Colors.red,
-                ),
-                onPressed: () {
-                  // tell admin to delete property listing
-                },
-              ),
             ),
           ],
         ),
