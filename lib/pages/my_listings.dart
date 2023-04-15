@@ -23,11 +23,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
         title: const Text("My Listings"),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection("users")
-              .doc(userEmail)
-              .collection("my listings")
-              .snapshots(),
+          stream: FirebaseFirestore.instance.collection("listings").snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(
@@ -63,15 +59,17 @@ class _MyListingsPageState extends State<MyListingsPage> {
               children: snapshot.data!.docs
                   .map(
                     (doc) => myListingsCard(
-                      context: context,
-                      id: doc.id,
-                      propertyDisplayImg: doc['img 1 URL'],
-                      propertyName: doc['name'],
-                      propertyPrice: doc['price'],
-                      propertyLocation: doc['location'],
-                      propertyTag: doc['tag'],
-                      propertyType: doc['type'],
-                    ),
+                        context: context,
+                        id: doc.id,
+                        propertyDisplayImg: doc['img 1 URL'],
+                        propertyName: doc['name'],
+                        propertyPrice: doc['price'],
+                        propertyLocation: doc['location'],
+                        propertyTag: doc['tag'],
+                        propertyType: doc['type'],
+                        state: doc['state'],
+                        userID: doc['user id'],
+                        approved: doc['approved']),
                   )
                   .toList(),
             );

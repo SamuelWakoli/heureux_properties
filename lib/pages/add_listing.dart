@@ -16,7 +16,8 @@ String propertyID =
     "${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}${DateTime.now().millisecond}";
 
 class _AddListingPageState extends State<AddListingPage> {
-  String? username = FirebaseAuth.instance.currentUser!.displayName.toString();
+  String? username = FirebaseAuth.instance.currentUser!.displayName.toString(),
+      userID = FirebaseAuth.instance.currentUser!.email.toString();
 
   String? propertyName,
       propertyLocation,
@@ -275,6 +276,9 @@ class _AddListingPageState extends State<AddListingPage> {
                         "tag": propertyTag,
                         "type": propertyType,
                         "username": username,
+                        "user id": userID,
+                        "state": false,
+                        "approved": false,
                         "img 1 URL": "",
                         "img 2 URL": "",
                         "img 3 URL": "",
