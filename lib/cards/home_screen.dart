@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:heureux_properties/pages/inquire.dart';
+import 'package:like_button/like_button.dart';
 
 import '../pages/details.dart';
 import '../utils.dart';
@@ -59,6 +60,56 @@ Widget homeCard({
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                LikeButton(
+                  isLiked: favoriteProperties.contains(id),
+                  bubblesColor: BubblesColor(
+                      dotPrimaryColor: Theme.of(context).primaryColor,
+                      dotSecondaryColor: Colors.white),
+                  circleColor: CircleColor(
+                    start: Theme.of(context).primaryColor,
+                    end: Colors.white,
+                  ),
+                  likeBuilder: (bool isLiked) {
+                    return Icon(
+                      Icons.bookmark,
+                      color: isLiked
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
+                      size: 32,
+                    );
+                  },
+                  onTap: ((isLiked) async {
+                    if (doesUserExists!) {
+                      if (!isLiked) {
+                        favoriteProperties.add(id);
+                      } else {
+                        favoriteProperties.remove(id);
+                      }
+
+                      Map<String, dynamic> data = {
+                        "favorites": favoriteProperties
+                      };
+
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userEmail)
+                          .update(data)
+                          .whenComplete(() {
+                        String likeMessage = "";
+                        isLiked
+                            ? likeMessage = "removed from"
+                            : likeMessage = "added to";
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "$propertyName $likeMessage to bookmarks")));
+                      });
+
+                      return !isLiked;
+                    }
+                    return null;
+                  }),
+                ),
+                const SizedBox(width: 30),
                 MaterialButton(
                   onPressed: () {
                     currentPropertyID = id;
@@ -73,47 +124,19 @@ Widget homeCard({
                   ),
                 ),
                 const SizedBox(width: 30),
-                IconButton(
-                    onPressed: () {
-                      currentPropertyID = id;
-
-                      showDialog(
-                          context: context,
-                          builder: (ctx) {
-                            return AlertDialog(
-                              actions: [
-                                TextButton(
-                                    onPressed: () async {
-                                      FirebaseStorage.instance
-                                          .ref("property images")
-                                          .child(id)
-                                          .delete()
-                                          .whenComplete(() async =>
-                                              await FirebaseFirestore.instance
-                                                  .collection("properties")
-                                                  .doc(id)
-                                                  .delete())
-                                          .whenComplete(() => ScaffoldMessenger
-                                                  .of(context)
-                                              .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      "Property Deleted"))));
-                                    },
-                                    child: const Text("Yes")),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(ctx);
-                                    },
-                                    child: const Text("No"))
-                              ],
-                            );
-                          });
-                    },
-                    tooltip: "Delete",
-                    icon: const Icon(
-                      Icons.delete_forever_outlined,
-                      color: Colors.red,
-                    )),
+                MaterialButton(
+                  onPressed: () {
+                    currentPropertyID = id;
+                    nextPage(context: context, page: const InquirePage());
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.cases_outlined),
+                      SizedBox(width: 10),
+                      Text("Inquire"),
+                    ],
+                  ),
+                ),
                 const SizedBox(width: 10),
               ],
             ),
