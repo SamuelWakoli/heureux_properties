@@ -40,12 +40,13 @@ class _PaymentInfoState extends State<PaymentInfo> {
               );
             }
 
-            // TODO: get doc fields
             return ListView(
-              children: snapshot.data!.docs
-                  .map((doc) => const ListTile(
-                        title: Text("PropertyName | Ksh. 20,000"),
-                        subtitle: Text("Date: 21/04/2022"),
+              children: snapshot.data!.docs.reversed
+                  .map((doc) => ListTile(
+                        title:
+                            Text("Ksh. ${doc['amount']}\nDate: ${doc['date']}"),
+                        subtitle: Text(
+                            "${doc['name']}\nLocation: ${doc['location']}"),
                       ))
                   .toList(),
             );

@@ -22,7 +22,7 @@ class _AddLocationState extends State<AddLocation> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Add Location"),
+        title: const Text("Property Location"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),

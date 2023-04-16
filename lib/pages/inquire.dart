@@ -27,6 +27,8 @@ class _InquirePageState extends State<InquirePage> {
 
   bool loading = false;
 
+  String? inqPropertyName, inqPropertyLocation, inqPropertyPrice;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +52,10 @@ class _InquirePageState extends State<InquirePage> {
                 }
 
                 dynamic doc = snapshot.data;
+
+                inqPropertyName = doc['name'];
+                inqPropertyLocation = doc['location'];
+                inqPropertyPrice = doc['price'];
 
                 return inquiryCard(
                   context: context,
@@ -194,7 +200,10 @@ class _InquirePageState extends State<InquirePage> {
                                 loading = true;
                               });
 
-                              Map<String, dynamic> data = {"phone": newPhone};
+                              Map<String, dynamic> data = {
+                                "name": username,
+                                "phone": newPhone
+                              };
 
                               await FirebaseFirestore.instance
                                   .collection("users")
@@ -270,7 +279,59 @@ class _InquirePageState extends State<InquirePage> {
                 style: ButtonStyle(
                     side: MaterialStateProperty.resolveWith((states) =>
                         BorderSide(color: Theme.of(context).primaryColor))),
-                onPressed: () {},
+                onPressed: () async {
+                  Map<String, dynamic> inquiryData = {
+                    "property ID": currentPropertyID,
+                    "property name": inqPropertyName,
+                    "property location": inqPropertyLocation,
+                    "property price": inqPropertyPrice,
+                    "user email": userEmail,
+                    "username": username,
+                    "user phone": userPhone,
+                  };
+
+                  // update user data, so as to manage inquiries
+                  Map<String, dynamic> userData = {
+                    "phone": newPhone,
+                    "name": username,
+                  };
+
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(userEmail)
+                      .set(userData)
+                      .whenComplete(() async => await FirebaseFirestore.instance
+                          .collection("inquiries")
+                          .doc("${DateTime.now()}")
+                          .set(inquiryData)
+                          .whenComplete(() => showDialog(
+                              context: context,
+                              builder: (ctx) {
+                                return AlertDialog(
+                                  icon: const Icon(Icons.done_all_rounded),
+                                  title: const Text("Inquiry Sent"),
+                                  content: const Text(
+                                      "We have received your inquiry, one "
+                                      "of our agents will contact you within 4 hours"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Icon(Icons.home_outlined),
+                                            SizedBox(width: 10),
+                                            Text("Home"),
+                                          ],
+                                        ))
+                                  ],
+                                );
+                              })));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
