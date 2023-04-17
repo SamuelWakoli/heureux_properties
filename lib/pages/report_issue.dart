@@ -75,7 +75,7 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
 
                   Map<String, dynamic> data = {
                     'issue': issueText,
-                    'username': username,
+                    'name': username,
                     'read': false
                   };
 

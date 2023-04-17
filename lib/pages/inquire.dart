@@ -288,11 +288,12 @@ class _InquirePageState extends State<InquirePage> {
                     "user email": userEmail,
                     "username": username,
                     "user phone": userPhone,
+                    "approved": false,
                   };
 
                   // update user data, so as to manage inquiries
                   Map<String, dynamic> userData = {
-                    "phone": newPhone,
+                    "phone": userPhone,
                     "name": username,
                   };
 
@@ -300,7 +301,7 @@ class _InquirePageState extends State<InquirePage> {
                   await FirebaseFirestore.instance
                       .collection("users")
                       .doc(userEmail)
-                      .set(userData) //then submit inquiry
+                      .update(userData) //then submit inquiry
                       .whenComplete(() async => await FirebaseFirestore.instance
                           .collection("inquiries")
                           .doc("${DateTime.now()}")
