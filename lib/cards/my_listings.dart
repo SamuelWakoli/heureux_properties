@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 /// Creates card for the My Listings Page
@@ -54,6 +56,52 @@ Widget myListingsCard({
               title: Text(propertyName),
               subtitle: Text(
                   "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation\nState: ${state ? (approved ? "Approved" : "Declined") : "Awaiting Review"}"),
+              trailing: IconButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return AlertDialog(
+                          icon: const Icon(
+                            Icons.delete_forever_outlined,
+                            color: Colors.red,
+                          ),
+                          title: const Text("Delete Inquiry"),
+                          content: Text(
+                              "Are you sure you want to delete $propertyName?"),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(ctx);
+                                  FirebaseStorage.instance
+                                      .ref("property images/$id")
+                                      .delete()
+                                      .whenComplete(() => FirebaseFirestore
+                                          .instance
+                                          .collection("listings")
+                                          .doc(id)
+                                          .delete()
+                                          .whenComplete(() => ScaffoldMessenger
+                                                  .of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "$propertyName has been deleted.")))));
+                                },
+                                child: const Text("Yes")),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(ctx);
+                                },
+                                child: const Text("No")),
+                          ],
+                        );
+                      });
+                },
+                icon: const Icon(
+                  Icons.delete_forever_outlined,
+                  color: Colors.red,
+                ),
+              ),
             ),
           ],
         ),

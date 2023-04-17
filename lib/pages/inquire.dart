@@ -274,7 +274,7 @@ class _InquirePageState extends State<InquirePage> {
                 ),
           const SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             child: OutlinedButton(
                 style: ButtonStyle(
                     side: MaterialStateProperty.resolveWith((states) =>
@@ -296,10 +296,11 @@ class _InquirePageState extends State<InquirePage> {
                     "name": username,
                   };
 
+                  // First update user data
                   await FirebaseFirestore.instance
                       .collection("users")
                       .doc(userEmail)
-                      .set(userData)
+                      .set(userData) //then submit inquiry
                       .whenComplete(() async => await FirebaseFirestore.instance
                           .collection("inquiries")
                           .doc("${DateTime.now()}")

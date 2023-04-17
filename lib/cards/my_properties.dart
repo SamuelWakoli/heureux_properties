@@ -47,7 +47,7 @@ Widget myPropertiesCard({
           ListTile(
             title: Text(propertyName),
             subtitle: Text(
-                "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation\nFully Paid"),
+                "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation"),
           ),
         ],
       ),

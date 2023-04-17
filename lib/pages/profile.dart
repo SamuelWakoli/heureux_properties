@@ -296,20 +296,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                   });
 
                                   Map<String, dynamic> data = {
+                                    "name": username,
                                     "phone": newPhone
                                   };
 
                                   await FirebaseFirestore.instance
                                       .collection("users")
                                       .doc(userEmail)
-                                      .update(data)
+                                      .set(data)
                                       .whenComplete(() {
                                     setState(() {
                                       loading = false;
                                     });
-                                    nextPageReplace(
-                                        context: context,
-                                        page: const ProfilePage());
                                   }).onError((error, stackTrace) {
                                     setState(() {
                                       loading = false;
@@ -323,9 +321,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text("No changes made.")));
-                                  setState(() {
-                                    editingPhone = false;
-                                  });
                                 }
                               },
                               child: loading
@@ -354,7 +349,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: const TextStyle(fontSize: 20));
                             }
 
-                            return Text(userPhone!,
+                            if (!snapshot.data!.exists) {
+                              return Text(userPhone!,
+                                  style: const TextStyle(fontSize: 20));
+                            }
+                            userPhone = snapshot.data!.get("phone").toString();
+
+                            return Text("Phone: $userPhone",
                                 style: const TextStyle(fontSize: 20));
                           }),
                       trailing: IconButton(

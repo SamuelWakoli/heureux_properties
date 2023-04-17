@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:heureux_properties/pages/bookmarks.dart';
 
 import '../pages/details.dart';
 import '../pages/inquire.dart';
@@ -102,7 +103,9 @@ Widget bookmarkCard({
                         .whenComplete(() => ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(
                                 content: Text(
-                                    "$propertyName has been removed from your favorites"))));
+                                    "$propertyName has been removed from your bookmarks"))))
+                        .whenComplete(() => nextPageReplace(
+                            context: context, page: const Bookmarks()));
                   },
                   tooltip: "Remove",
                   icon: const Icon(

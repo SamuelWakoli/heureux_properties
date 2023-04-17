@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../cards/card_functions.dart';
 import '../utils.dart';
 import 'add_location.dart';
 
@@ -246,7 +247,10 @@ class _AddListingPageState extends State<AddListingPage> {
                         "description": propertyDescription,
                         "tag": propertyTag,
                         "type": propertyType,
+                        "user id": userEmail,
                         "username": username,
+                        "state": false,
+                        "approved": false,
                         "img 1 URL": "",
                         "img 2 URL": "",
                         "img 3 URL": "",

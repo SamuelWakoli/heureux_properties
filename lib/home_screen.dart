@@ -336,11 +336,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         context: context,
                         id: doc.id,
                         propertyDisplayImg: doc['img 1 URL'],
-                        propertyName: doc['name'],
-                        propertyPrice: doc['price'],
-                        propertyLocation: doc['location'],
-                        propertyTag: doc['tag'],
-                        propertyType: doc['type'],
+                        propertyName: doc['name'].toString(),
+                        propertyPrice: doc['price'].toString(),
+                        propertyLocation: doc['location'].toString(),
+                        propertyTag: doc['tag'].toString(),
+                        propertyType: doc['type'].toString(),
                       ))
                   .toList(),
             );
