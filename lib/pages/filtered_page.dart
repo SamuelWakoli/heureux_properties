@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../cards/filter_card.dart';
+import '../cards/home_screen.dart';
 
 class FilteredPage extends StatefulWidget {
   const FilteredPage({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class _FilteredPageState extends State<FilteredPage> {
 
             return ListView(
               children: snapshot.data!.docs
-                  .map((doc) => filterCard(
+                  .map((doc) => homeCard(
                         context: context,
                         id: doc.id,
                         propertyDisplayImg: doc['img 1 URL'],

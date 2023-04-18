@@ -60,10 +60,10 @@ class _DetailsPageState extends State<DetailsPage> {
             title: Text(propertyName, style: const TextStyle(fontSize: 18)),
             subtitle: Text.rich(TextSpan(
                 text:
-                    "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation\n",
+                    "$propertyType\n$propertyTag | Price: Ksh. $propertyPrice\nLocation: $propertyLocation\n\n",
                 children: [
                   TextSpan(
-                      text: "$propertyDescription}",
+                      text: propertyDescription,
                       style: const TextStyle(fontSize: 16))
                 ])),
           ),
@@ -130,14 +130,15 @@ class _DetailsPageState extends State<DetailsPage> {
             return ListView(
               children: [
                 _displayImg(
-                    context: context,
-                    propertyImg: image1Url!,
-                    propertyName: document['name'].toString(),
-                    propertyPrice: document['price'].toString(),
-                    propertyLocation: document['location'].toString(),
-                    propertyType: document['type'].toString(),
-                    propertyTag: document['tag'].toString(),
-                    propertyDescription: document['description'].toString()),
+                  context: context,
+                  propertyImg: image1Url!,
+                  propertyName: document['name'].toString(),
+                  propertyPrice: document['price'].toString(),
+                  propertyLocation: document['location'].toString(),
+                  propertyType: document['type'].toString(),
+                  propertyTag: document['tag'].toString(),
+                  propertyDescription: document['description'].toString(),
+                ),
                 const SizedBox(height: 10),
                 _getImages(image2Url!),
                 _getImages(image3Url!),
