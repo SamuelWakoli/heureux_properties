@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "661530293551",
+    "project_id": "heureux-prop",
+    "storage_bucket": "heureux-prop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661530293551:android:4ac09d2b50eb76fdbb9dda",
+        "android_client_info": {
+          "package_name": "com.heureuxproperties.heureux_properties"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "661530293551-28uhtdj4gkuefv8vj9qakjb122mlfbft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzGE6D4CtjdyqPPEwBpiLUXDBlBKWp-3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "661530293551-28uhtdj4gkuefv8vj9qakjb122mlfbft.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

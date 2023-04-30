@@ -71,9 +71,9 @@ Widget myListingsCard({
                               "Are you sure you want to delete $propertyName?"),
                           actions: [
                             TextButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.pop(ctx);
-                                  FirebaseStorage.instance
+                                  await FirebaseStorage.instance
                                       .ref("property images/$id")
                                       .delete()
                                       .whenComplete(() => FirebaseFirestore
