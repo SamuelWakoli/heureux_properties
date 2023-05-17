@@ -31,22 +31,18 @@ Widget homeCard({
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(18.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 200,
-                child: CachedNetworkImage(
-                  fit: BoxFit.fill,
-                  imageUrl: propertyDisplayImg,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        value: downloadProgress.progress,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).primaryColor),
-                      ),
+              child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                imageUrl: propertyDisplayImg,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor),
                     ),
                   ),
                 ),
